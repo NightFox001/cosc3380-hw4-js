@@ -25,7 +25,7 @@ export const FlightScheduler = () => {
       const getAirports = async () => {
         const response = await axios.get(`/api/airports`)
         setLoadingAirports(false)
-        if (response.status === 200) {
+        if (response.statusText === "OK") {
           setAirports(response.data)
         } else {
           setAirports([])
@@ -38,7 +38,7 @@ export const FlightScheduler = () => {
         setLoadingFlight(true)
         const response = await axios.get(`/api/flights?limit=50`)
         setLoadingFlight(false)
-        if (response.status === 200) {
+        if (response.statusText === "OK") {
           setFlights(response.data)
         } else {
           setFlights([])
@@ -47,29 +47,29 @@ export const FlightScheduler = () => {
 
       console.log(selectedDeparture, selectedArrival)
 
-    return (
-        <Grid container spacing={2}>
-            {/* <FlightSchedulerItem>
-                <DropDownInput options={flights} selected={selectedFlight} onChange={setSelectedFlight} />
-            </FlightSchedulerItem> */}
-            <FlightSchedulerItem>
-                <DropDownInput
-                    title="Departure"
-                    options={airports.map(({ city, airport_code }) => ({ label: city, value: airport_code}))}
-                    selected={selectedDeparture}
-                    defaultOption={{ label: "", value: "0" }}
-                    onChange={setSelectedDeparture}
-                />
-            </FlightSchedulerItem>
-            <FlightSchedulerItem>
-                <DropDownInput
-                    title="Arrival"
-                    options={airports.map(({ city, airport_code }) => ({ label: city, value: airport_code}))}
-                    selected={selectedArrival}
-                    defaultOption={{ label: "", value: "0" }}
-                    onChange={setSelectedArrival}
-                />
-            </FlightSchedulerItem>
-        </Grid>
+  return (
+    <Grid container spacing={2}>
+      <Grid container item spacing={2}>
+          <FlightSchedulerItem>
+              <DropDownInput
+                  title="Departure"
+                  options={airports.map(({ city, airport_code }) => ({ label: city, value: airport_code}))}
+                  selected={selectedDeparture}
+                  defaultOption={{ label: "", value: "0" }}
+                  onChange={setSelectedDeparture}
+              />
+          </FlightSchedulerItem>
+          <FlightSchedulerItem>
+              <DropDownInput
+                  title="Arrival"
+                  options={airports.map(({ city, airport_code }) => ({ label: city, value: airport_code}))}
+                  selected={selectedArrival}
+                  defaultOption={{ label: "", value: "0" }}
+                  onChange={setSelectedArrival}
+              />
+          </FlightSchedulerItem>
+      </Grid>
+    </Grid>
+    
     )
 }

@@ -1,10 +1,16 @@
 import { connection, Sequelize } from '../../models'
 
 const handler = async (req, res) => {
-    
-    const customers = await connection.query(`SELECT customer_email\n FROM customers`, {
-        type: Sequelize.QueryTypes.SELECT
-    });
+    let customers
+    try {
+        customers = await connection.query(`SELECT customer_email\n FROM customers`, {
+            type: Sequelize.QueryTypes.SELECT
+        });
+    } 
+    catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+
     // console.log(customers);
     const name = req.query?.name
     const email = req.query?.email //email entered by user

@@ -2,8 +2,14 @@ import axios from "axios"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import Alert from "@material-ui/lab/Alert";
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
-const Login = () => {
+
+const signUp = () => {
     const router = useRouter()
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
@@ -15,16 +21,21 @@ const Login = () => {
     const [loadingRegister, setLoadingRegister] = useState(false)
 
     useEffect(() => {
-      const getCities = async () => {
-        const response = await axios.get(`/api/cities`)
-        setLoadingCities(false)
-        if (response.status === 200) {
-          setCities(response.data)
-        } else {
-          setCities([])
+        const getCities = async () => {
+            try {
+                const response = await axios.get(`/api/cities`)
+                setLoadingCities(false)
+                if (response.statusText === "OK") {
+                    setCities(response.data)
+                } else {
+                    throw "Could not get cities."
+                }
+            } catch (error) {
+                setCities([])
+                setError("Could not get cities from database.")
+            }
         }
-      }
-      setTimeout(getCities, 0)
+        setTimeout(getCities, 0)
     }, [])
 
     const handleRegister = async () => {
@@ -59,7 +70,7 @@ const Login = () => {
 
         <div>
             {!!error && <Alert severity="error">{error}</Alert>}
-            <p>Create new customer login</p>
+            <p>Create new customer</p>
             <p>
                 <input placeholder="Full Name" type="name" onChange={(e) => setName(e.target.value)} value={name} />
             </p>
@@ -87,4 +98,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default signUp
