@@ -48,7 +48,7 @@ const Login = () => {
         try {
             const response = await axios.get(`/api/register?email=${email}&password=${password}&name=${name}&city=${city}`)
             localStorage.setItem("user", JSON.stringify(response.data))
-            router.push("/")
+            router.push("/") 
         } catch (error) {
             return setError(error.response?.data?.message || "There was an issue creating your account.")
         }
@@ -56,8 +56,10 @@ const Login = () => {
     }
 
     return (
+
         <div>
             {!!error && <Alert severity="error">{error}</Alert>}
+            <p>Create new customer login</p>
             <p>
                 <input placeholder="Full Name" type="name" onChange={(e) => setName(e.target.value)} value={name} />
             </p>
