@@ -32,7 +32,7 @@ export const FlightScheduler = () => {
   const [selectedDepartAirport, setSelectedDepartAirport] = useState("HOU")
   const [selectedArriveAirport, setSelectedArriveAirport] = useState()
   const [selectedDepartDate, setSelectedDepartDate] = useState(new Date())
-  const [selectedArriveDate, setSelectedArriveDate] = useState(moment().add(1, "day").toDate())
+  const [selectedReturnDate, setSelectedArriveDate] = useState(moment().add(1, "day").toDate())
   const [airports, setAirports] = useState([])
   const [loadingAirports, setLoadingAirports] = useState(true)
   const [tripType, setTripType] = useState("roundTrip")
@@ -60,7 +60,10 @@ export const FlightScheduler = () => {
   }, [])
 
   const searchFlights = async () => {
-    router.push(`/flights?departAirport=${selectedDepartAirport}&arriveAirport=${selectedArriveAirport}&departDate=${selectedDepartDate.toISOString()}&returnDate=${selectedArriveDate.toISOString()}&tripType=${tripType}`)
+    const departDateFormatted = moment(selectedDepartDate).format('YYYY-MM-DD')
+    const returnDateFormatted = moment(selectedReturnDate).format('YYYY-MM-DD')
+    console.log(departDateFormatted, returnDateFormatted)
+    router.push(`/flights?departAirport=${selectedDepartAirport}&arriveAirport=${selectedArriveAirport}&departDate=${departDateFormatted}&returnDate=${returnDateFormatted}&tripType=${tripType}`)
   }
 
   return (
@@ -127,7 +130,7 @@ export const FlightScheduler = () => {
               label="Return Date"
               format="MM/DD/yyyy"
               clearable
-              value={selectedArriveDate}
+              value={selectedReturnDate}
               onChange={setSelectedArriveDate}
               disabled={tripType === "oneWay"}
             />
