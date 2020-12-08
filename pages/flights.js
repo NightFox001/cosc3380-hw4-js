@@ -68,11 +68,11 @@ const Flights = () => {
          <Paper className={classes.paper}>  {/* make titles for Depart time, arrive time, num of stops, travel time, select flight */}
   
          <Grid container spacing={2} style={{
-    paddingTop: 10,
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderColor: "rgba(0,0,0,0.1)"
-    }}>
+            paddingTop: 10,
+            paddingBottom: 10,
+            borderBottomWidth: 1,
+            borderColor: "rgba(0,0,0,0.1)"
+            }}>
             <Grid item xs={2}>
               Flight ID
             </Grid>
@@ -109,10 +109,8 @@ const Flights = () => {
             const travelTime = (
               isConnectingFlight ? 
               moment.utc(moment(firstFlight.scheduled_departure,"YYYY/MM/DD HH:mm:ss").diff(moment(secondFlight.scheduled_arrival,"YYYY/MM/DD HH:mm:ss"))).format("h[h] mm[m]") 
-              : moment(firstFlight.scheduled_arrival).format("h[h] mm[m]")
+              : moment.utc(moment(firstFlight.scheduled_departure,"YYYY/MM/DD HH:mm:ss").diff(moment(firstFlight.scheduled_arrival,"YYYY/MM/DD HH:mm:ss"))).format("h[h] mm[m]")
             )
-              
-            
             return (
               <Grid container spacing={2}>
                 <Grid item xs={2}>
@@ -137,23 +135,70 @@ const Flights = () => {
         </Paper>
         {tripType === "roundTrip" && (
           <>
-            <h1 style={{ color: 'white', fontWeight: 900 }}>{`Depart ${arriveAirport} -> ${departAirport}`}</h1>
+            <h1 style={{ color: 'white', fontWeight: 900 }}>{`Arrive ${arriveAirport} -> ${departAirport}`}</h1>
+
             <Paper className={classes.paper}>
+            <Grid container spacing={2} style={{
+            paddingTop: 10,
+            paddingBottom: 10,
+            borderBottomWidth: 1,
+            borderColor: "rgba(0,0,0,0.1)"
+            }}>
+            <Grid item xs={2}>
+              Flight ID
+            </Grid>
+            <Grid item xs={2}>
+              Depart
+            </Grid>
+            <Grid item xs={2}>
+              Arrive
+            </Grid>
+            <Grid item xs={2}>
+              Stops
+            </Grid>
+            <Grid item xs={2}>
+              Travel Time
+            </Grid>
+          </Grid>
+
               {returnFlights.map((flight) => {
-                const isConnectingFlight = !!flight.length
-                let firstFlight = null
-                let secondFlight = null
-                if (isConnectingFlight) {
-                  firstFlight = flight[0]
-                  secondFlight = flight[1]
-                } else {
-                  firstFlight = flight
-                }
+            const isConnectingFlight = !!flight.length
+            let firstFlight = null
+            let secondFlight = null
+            if (isConnectingFlight) {
+              firstFlight = flight[0]
+              secondFlight = flight[1]
+            } else {
+              firstFlight = flight
+            }
+            
+            const departTime = moment(firstFlight.scheduled_departure).format('h:mma')
+            const arriveTime = moment(
+              isConnectingFlight ? secondFlight.scheduled_arrival : firstFlight.scheduled_arrival
+            ).format('h:mma')
+            const numStops = (isConnectingFlight ? secondFlight.departure_airport : "Nonstop")
+            const travelTime = (
+              isConnectingFlight ? 
+              moment.utc(moment(firstFlight.scheduled_departure,"YYYY/MM/DD HH:mm:ss").diff(moment(secondFlight.scheduled_arrival,"YYYY/MM/DD HH:mm:ss"))).format("h[h] mm[m]") 
+              : moment(firstFlight.scheduled_arrival).format("h[h] mm[m]")
+            )
                 return (
                   <Grid container spacing={2}>
                     <Grid item xs={2}>
                       {`# ${firstFlight.flight_id}`}
                       {!!secondFlight ? ` / ${secondFlight.flight_id}` : ""}
+                    </Grid>
+                    <Grid item xs={2}>
+                      {departTime}
+                    </Grid>
+                    <Grid item xs={2}>
+                      {arriveTime}
+                    </Grid>
+                    <Grid item xs={2}>
+                      {numStops}
+                    </Grid>
+                    <Grid>
+                      {travelTime}
                     </Grid>
                   </Grid>
                 )
