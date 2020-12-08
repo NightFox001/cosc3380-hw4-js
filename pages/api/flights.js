@@ -1,15 +1,14 @@
+import moment from "moment"
 import { connection, Sequelize } from '../../models'
 
 const handler = async (req, res) => {
     const { 
-        departAirport, 
-        destAirport, 
-        departDate,
-        passenger_count, 
-        trip_type
-        } = req.query
+      departAirport, 
+      arriveAirport, 
+      departDate
+    } = req.query
 
-    const dayAfterDepart = moment(depart_date).add(1, "day").toDate()
+    const dayAfterDepart = moment(departDate).add(1, "day").toISOString()
     
     console.log("depart date", departDate)
     console.log("next date", dayAfterDepart)
@@ -18,7 +17,7 @@ const handler = async (req, res) => {
       `SELECT * \n
       FROM flights \n
       WHERE departure_airport = '${departAirport}' \n
-      AND arrival_airport = '${destAirport}' \n
+      AND arrival_airport = '${arriveAirport}' \n
       AND scheduled_departure BETWEEN '${departDate}'
       AND '${dayAfterDepart}'\n
       LIMIT 50;\n`,
@@ -38,8 +37,8 @@ const handler = async (req, res) => {
             AND f2.scheduled_departure <= '${dayAfterDepart}' \
             AND f1.scheduled_arrival <= f2.scheduled_departure \
             AND f1.departure_airport = '${departAirport}' \
-            AND f1.arrival_airport <> '${destAirport}' \
-            AND f2.arrival_airport = '${destAirport}' \
+            AND f1.arrival_airport <> '${arriveAirport}' \
+            AND f2.arrival_airport = '${arriveAirport}' \
             AND f1.arrival_airport = f2.departure_airport \
             limit 20\n;`,
         {

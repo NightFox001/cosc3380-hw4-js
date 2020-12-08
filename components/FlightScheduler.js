@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useRouter } from "next/router";
 import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -27,18 +28,21 @@ const useStyles = makeStyles((theme) => ({
 
 export const FlightScheduler = () => {
   const classes = useStyles()
-  const [selectedDepartureAirport, setSelectedDepartureAirport] = useState("HOU")
-  const [selectedArrivalAirport, setSelectedArrivalAirport] = useState()
+  const router = useRouter()
+  const [selectedDepartAirport, setSelectedDepartAirport] = useState("HOU")
+  const [selectedArriveAirport, setSelectedArriveAirport] = useState()
+  const [selectedDepartDate, setSelectedDepartDate] = useState(new Date())
+  const [selectedArriveDate, setSelectedArriveDate] = useState(moment().add(1, "day").toDate())
   const [airports, setAirports] = useState([])
   const [loadingAirports, setLoadingAirports] = useState(true)
-  const [tripType, setTripType] = useState("round-trip")
-  const [selectedPassengers, setselectedPassengers] = useState("1")
+  const [tripType, setTripType] = useState("roundTrip")
+  const [selectedPassengers, setSelectedPassengers] = useState("1")
 
   useEffect(() => {
       if (airports.length) {
-          const nonDepartureAirports = airports.filter(city => (city.airport_code !== selectedDepartureAirport))
-          const arrivalCity = nonDepartureAirports[Math.floor(Math.random() * nonDepartureAirports.length)]
-          setSelectedArrivalAirport(arrivalCity.airport_code)
+          const nonDepartAirports = airports.filter(city => (city.airport_code !== selectedDepartAirport))
+          const arriveCity = nonDepartAirports[Math.floor(Math.random() * nonDepartAirports.length)]
+          setSelectedArriveAirport(arriveCity.airport_code)
       }
   }, [airports])
 
@@ -56,21 +60,7 @@ export const FlightScheduler = () => {
   }, [])
 
   const searchFlights = async () => {
-    router.push(`/flights?departure_date=${selectedDepartureAirport}&arrival_date=${selectedArrivalAirport}&selected_fl`)
-
-    // setLoadingFlight(true)
-
-    // const flightsLeaveing = await axios.get(`/api/flight`)
-    // const flightsReturning =...
-
-    // setLoadingFlight(false)
-
-    // if (response.statusText === "OK") {
-    //   setFlights(response.data)
-    // } else {
-    //   setFlights([])
-    // }
-
+    router.push(`/flights?departAirport=${selectedDepartAirport}&arriveAirport=${selectedArriveAirport}&departDate=${selectedDepartDate.toISOString()}&returnDate=${selectedArriveDate.toISOString()}&tripType=${tripType}`)
   }
 
   return (
@@ -80,17 +70,17 @@ export const FlightScheduler = () => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <RadioGroup value={tripType} onChange={({ nativeEvent }) => setTripType(nativeEvent.target.value)}>
-              <FormControlLabel value="round-trip" control={<Radio />} label="Round Trip" />
-              <FormControlLabel value="one-way" control={<Radio />} label="One-way" />
+              <FormControlLabel value="roundTrip" control={<Radio />} label="Round Trip" />
+              <FormControlLabel value="oneWay" control={<Radio />} label="One-way" />
             </RadioGroup>
           </Grid>
           <FlightSchedulerItem> {/* [0,0] */}
             <DropDownInput
-              title="Departure"
+              title="Depart"
               options={airports.map(({ city, airport_code }) => ({ label: city, value: airport_code}))}
-              selected={selectedDepartureAirport}
+              selected={selectedDepartAirport}
               defaultOption={{ label: "", value: "0" }}
-              onChange={setSelectedDepartureAirport}
+              onChange={setSelectedDepartAirport}
             />
           </FlightSchedulerItem>
           <FlightSchedulerItem> {/* [0,1] */}
@@ -104,8 +94,8 @@ export const FlightScheduler = () => {
               label="Depart Date"
               format="MM/DD/yyyy"
               clearable
-              value={new Date()}
-              onChange={() => {}}
+              value={selectedDepartDate}
+              onChange={setSelectedDepartDate}
             />
           </FlightSchedulerItem>         
           <FlightSchedulerItem> {/* [0,2] */}
@@ -114,16 +104,16 @@ export const FlightScheduler = () => {
                 options={["1","2","3","4","5"].map(number => ({ value: number, label: number }))}
                 selected={selectedPassengers}
                 defaultOption={{ label: "", value: "0" }}
-                onChange={setSelectedDepartureAirport}
+                onChange={setSelectedPassengers}
               />
           </FlightSchedulerItem>         
           <FlightSchedulerItem> {/* [1,0] */}
             <DropDownInput
               title="Destination"
               options={airports.map(({ city, airport_code }) => ({ label: city, value: airport_code}))}
-              selected={selectedArrivalAirport}
+              selected={selectedArriveAirport}
               defaultOption={{ label: "", value: "0" }}
-              onChange={setSelectedArrivalAirport}
+              onChange={setSelectedArriveAirport}
             />
           </FlightSchedulerItem>
           <FlightSchedulerItem> {/* [1,1] */}
@@ -137,8 +127,9 @@ export const FlightScheduler = () => {
               label="Return Date"
               format="MM/DD/yyyy"
               clearable
-              value={moment().add(1, "days").toDate()}
-              onChange={() => {}}
+              value={selectedArriveDate}
+              onChange={setSelectedArriveDate}
+              disabled={tripType === "oneWay"}
             />
           </FlightSchedulerItem>
           <Grid item xs={12}>
