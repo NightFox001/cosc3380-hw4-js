@@ -1,15 +1,24 @@
-import axios from "axios"
-import { useState, useEffect } from "react"
-import { useRouter } from "next/router"
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Alert from "@material-ui/lab/Alert";
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import { DropDownInput } from "../components/DropDownInput";
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    background: "rgba(255,255,255,0.9)"
+  },
+}));
 
-const signUp = () => {
+const Register = () => {
+    const classes = useStyles()
     const router = useRouter()
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
@@ -67,35 +76,47 @@ const signUp = () => {
     }
 
     return (
-
         <div>
-            {!!error && <Alert severity="error">{error}</Alert>}
-            <p>Create new customer</p>
-            <p>
-                <input placeholder="Full Name" type="name" onChange={(e) => setName(e.target.value)} value={name} />
-            </p>
-            <p>
-                <input placeholder="Email" type="email" onChange={(e) => setEmail(e.target.value)} value={email} />
-            </p>
-            <p>
-                <input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} value={password} />
-            </p>
-            <p>
-                <select onChange={(e) => setCity(e.target.value)}>
-                    {loadingCities && (
-                        <option>Loading</option>
-                    )}
-                    <option key="0" value="0">City</option>
-                    {cities.map(({ city }) => (
-                        <option key={city} value={city}>
-                            {city}
-                        </option>
-                    ))}
-                </select>
-            </p>
-            <button onClick={handleRegister}>Create Account</button>
+            <h1 style={{ color: 'white', fontWeight: 900 }}>Create Account</h1>
+            <Paper className={classes.paper}>
+                {!!error && <Alert severity="error">{error}</Alert>}
+                <TextField
+                    label="Full Name"
+                    type="name"
+                    margin="normal"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
+                <br /><br />
+                <TextField
+                    label="Email"
+                    type="email"
+                    margin="normal"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <br /><br />
+                <TextField
+                    label="Password"
+                    type="password"
+                    margin="normal"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <br /><br />
+                <div style={{ width: 172, margin: 'auto' }}>
+                    <DropDownInput
+                        title="City"
+                        options={cities.map(({ city: cityName }) => ({ label: cityName, value: cityName }))}
+                        selected={city}
+                        onChange={setCity}
+                    />
+                </div>
+                <br /><br />
+                <Button color="primary" onClick={handleRegister} variant="contained">Register</Button>
+            </Paper>
         </div>
     )
 }
 
-export default signUp
+export default Register
