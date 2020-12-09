@@ -1,0 +1,5 @@
+{
+    "postgreSql.dbName": "postgres OR THE DB YOU WANT TO CONNECT TO",
+    "postgreSql.hostName": "YOUR POSTGRES SERVER",
+    "postgreSql.username": "YOUR POSTGRES USERNAME"
+}

@@ -40,9 +40,9 @@ export const FlightScheduler = () => {
 
   useEffect(() => {
       if (airports.length) {
-          const nonDepartAirports = airports.filter(city => (city.airport_code !== selectedDepartAirport))
+          const nonDepartAirports = airports.filter(city => (city.airport_id !== selectedDepartAirport))
           const arriveCity = nonDepartAirports[Math.floor(Math.random() * nonDepartAirports.length)]
-          setSelectedArriveAirport(arriveCity.airport_code)
+          setSelectedArriveAirport(arriveCity.airport_id)
       }
   }, [airports])
 
@@ -79,7 +79,7 @@ export const FlightScheduler = () => {
           <FlightSchedulerItem> {/* [0,0] */}
             <DropDownInput
               title="Depart"
-              options={airports.map(({ city, airport_code }) => ({ label: city, value: airport_code}))}
+              options={airports.map(({ city, airport_id }) => ({ label: city, value: airport_id}))}
               selected={selectedDepartAirport}
               defaultOption={{ label: "", value: "0" }}
               onChange={setSelectedDepartAirport}
@@ -112,7 +112,7 @@ export const FlightScheduler = () => {
           <FlightSchedulerItem> {/* [1,0] */}
             <DropDownInput
               title="Destination"
-              options={airports.map(({ city, airport_code }) => ({ label: city, value: airport_code}))}
+              options={airports.map(({ city, airport_id }) => ({ label: city, value: airport_id}))}
               selected={selectedArriveAirport}
               defaultOption={{ label: "", value: "0" }}
               onChange={setSelectedArriveAirport}

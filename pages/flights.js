@@ -113,7 +113,7 @@ const Flights = () => {
             const arriveTime = moment(
               isConnectingFlight ? secondFlight.scheduled_arrival : firstFlight.scheduled_arrival
             ).format('h:mma')
-            const numStops = (isConnectingFlight ? secondFlight.departure_airport : "Nonstop")
+            const numStops = (isConnectingFlight ? secondFlight.departure_airport_id : "Nonstop")
             const travelTime = (
               isConnectingFlight ? 
               moment.utc(moment(firstFlight.scheduled_departure,"YYYY/MM/DD HH:mm:ss").diff(moment(secondFlight.scheduled_arrival,"YYYY/MM/DD HH:mm:ss"))).format("h[h] mm[m]") 
@@ -204,7 +204,7 @@ const Flights = () => {
                 const arriveTime = moment(
                   isConnectingFlight ? secondFlight.scheduled_arrival : firstFlight.scheduled_arrival
                 ).format('h:mma')
-                const numStops = (isConnectingFlight ? secondFlight.departure_airport : "Nonstop")
+                const numStops = (isConnectingFlight ? secondFlight.departure_airport_id : "Nonstop")
                 const travelTime = (
                   isConnectingFlight ? 
                   moment.utc(moment(firstFlight.scheduled_departure,"YYYY/MM/DD HH:mm:ss").diff(moment(secondFlight.scheduled_arrival,"YYYY/MM/DD HH:mm:ss"))).format("h[h] mm[m]") 
