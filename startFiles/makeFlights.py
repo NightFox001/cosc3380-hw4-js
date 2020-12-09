@@ -8,7 +8,7 @@ month2 = 1
 
 
 def turnSplitIntoTimestamp(year, month, day, hour, minute, second):
-    return str(year) + "-" + str(month) + "-" + str(day) + " " + str(hour) + ":" + str(minute) + ":" + str(second)
+    return str(year) + "-" + str(month) + "-" + str(day).zfill(2) + " " + str(hour).zfill(2) + ":" + str(minute).zfill(2) + ":" + str(second).zfill(2) 
 
 # based on arrival time
 def getDeparture(year, month, day, hour, minute, second):
@@ -46,102 +46,43 @@ def returnRandomAirportCode():
     return switcher.get(randint(0,9),0)
 
 
-flightID = 10000
 for m in "ab":
     year = year1 if m == "a" else year2
     month = month1 if m == "a" else month2
     for day in range(1,31):
+        def makeFlight(seats_available, movieB, mealB, airCodeS, airCodeF, codeHashGate, year, month, day):
+            for boeingAircraft in range(airCodeS,airCodeF):
+                hour = randint(4,6)
+                minute = randint(0,59)
+                second = randint(0,59)
+                flight_cost = randint(150,300)
+                arAirport = returnRandomAirportCode()
+                for i in range(0,3):
+                    deAirport = arAirport
+                    arAirport = returnRandomAirportCode()
+                    argate = chr(randint(97,103)) + str(randint(1,19))
+                    degate = chr(randint(97,103)) + str(randint(1,19))
+                    argateHash = arAirport + argate
+                    degateHash = deAirport + degate
+                    if (arAirport == deAirport):
+                        continue
+                    if (degateHash == argateHash):
+                        continue
+                    if (degateHash in codeHashGate or argateHash in codeHashGate):
+                        continue
+                    codeHashGate.append(argateHash)
+                    codeHashGate.append(degateHash)
+                    status = getRandomStatus()
+                    seats_booked = 0
+                    movie = 'TRUE' if (movieB) else 'FALSE'
+                    meal = 'TRUE' if (mealB) else 'FALSE'
+                    (year, month, day, hour, minute, second) = getArrival(year, month, day, hour, minute, second)
+                    arrTime = turnSplitIntoTimestamp(year, month, day, hour, minute, second)
+                    (year, month, day, hour, minute, second) = getDeparture(year, month, day, hour, minute, second)
+                    depTime = turnSplitIntoTimestamp(year, month, day, hour, minute, second)
+                    print("INSERT INTO flights (aircraft_code,scheduled_departure, scheduled_arrival, departure_airport_id, arrival_airport_id, departure_gate_id, arrival_gate_id, status, waitlist_no, seats_available, movie, meal, flight_cost)\nVALUES('" + str(boeingAircraft) + "','" + str(arrTime) + "','" + str(depTime) + "','" + str(deAirport) + "','" + str(arAirport) + "','" + str(degate) + "','" + str(argate) + "','" + str(status) + "','" + str(seats_booked) + "','" + str(seats_available) + "','" + str(movie) + "','" + str(meal) + "','" + str(flight_cost) + "');")
+
         codeHashGate = []
-        for boeingAircraft in range(700,733):
-            hour = randint(4,6)
-            minute = randint(0,59)
-            second = randint(0,59)
-            flight_cost = randint(150,300)
-            arAirport = returnRandomAirportCode()
-            for i in range(0,3):
-                deAirport = arAirport
-                arAirport = returnRandomAirportCode()
-                argate = chr(randint(97,103)) + str(randint(1,19))
-                degate = chr(randint(97,103)) + str(randint(1,19))
-                argateHash = arAirport + argate
-                degateHash = deAirport + degate
-                if (arAirport == deAirport):
-                    continue
-                if (degateHash == argateHash):
-                    continue
-                if (degateHash in codeHashGate or argateHash in codeHashGate):
-                    continue
-                codeHashGate.append(argateHash)
-                codeHashGate.append(degateHash)
-                status = getRandomStatus()
-                seats_booked = 0
-                movie = 'TRUE'
-                meal = 'TRUE'
-                (year, month, day, hour, minute, second) = getArrival(year, month, day, hour, minute, second)
-                arrTime = turnSplitIntoTimestamp(year, month, day, hour, minute, second)
-                (year, month, day, hour, minute, second) = getDeparture(year, month, day, hour, minute, second)
-                depTime = turnSplitIntoTimestamp(year, month, day, hour, minute, second)
-                print("INSERT INTO flights\nVALUES('" + str(flightID) + "','" + str(boeingAircraft) + "','" + str(arrTime) + "','" + str(depTime) + "','" + str(deAirport) + "','" + str(arAirport) + "','" + str(degate) + "','" + str(argate) + "','" + str(status) + "','" + str(seats_booked) + "','" + str(210) + "','" + str(movie) + "','" + str(meal) + "','" + str(flight_cost) + "');")
-                flightID = flightID + 1
-        for boeingAircraft in range(300,329):
-            hour = randint(4,6)
-            minute = randint(0,59)
-            second = randint(0,59)
-            flight_cost = randint(150,300)
-            arAirport = returnRandomAirportCode()
-            for i in range(0,3):
-                deAirport = arAirport
-                arAirport = returnRandomAirportCode()
-                argate = chr(randint(97,103)) + str(randint(1,19))
-                degate = chr(randint(97,103)) + str(randint(1,19))
-                argateHash = arAirport + argate
-                degateHash = deAirport + degate
-                if (arAirport == deAirport):
-                    continue
-                if (degateHash == argateHash):
-                    continue
-                if (degateHash in codeHashGate or argateHash in codeHashGate):
-                    continue
-                codeHashGate.append(argateHash)
-                codeHashGate.append(degateHash)
-                status = getRandomStatus()
-                seats_booked = 0
-                movie = 'TRUE'
-                meal = 'TRUE'
-                (year, month, day, hour, minute, second) = getArrival(year, month, day, hour, minute, second)
-                arrTime = turnSplitIntoTimestamp(year, month, day, hour, minute, second)
-                (year, month, day, hour, minute, second) = getDeparture(year, month, day, hour, minute, second)
-                depTime = turnSplitIntoTimestamp(year, month, day, hour, minute, second)
-                print("INSERT INTO flights\nVALUES('" + str(flightID) + "','" + str(boeingAircraft) + "','" + str(arrTime) + "','" + str(depTime) + "','" + str(deAirport) + "','" + str(arAirport) + "','" + str(degate) + "','" + str(argate) + "','" + str(status) + "','" + str(seats_booked) + "','" + str(260) + "','" + str(movie) + "','" + str(meal) + "','" + str(flight_cost) + "');")
-                flightID = flightID + 1
-        for boeingAircraft in range(760,798):
-            hour = randint(4,6)
-            minute = randint(0,59)
-            second = randint(0,59)
-            flight_cost = randint(150,300)
-            arAirport = returnRandomAirportCode()
-            for i in range(0,3):
-                deAirport = arAirport
-                arAirport = returnRandomAirportCode()
-                argate = chr(randint(97,103)) + str(randint(1,19))
-                degate = chr(randint(97,103)) + str(randint(1,19))
-                argateHash = arAirport + argate
-                degateHash = deAirport + degate
-                if (arAirport == deAirport):
-                    continue
-                if (degateHash == argateHash):
-                    continue
-                if (degateHash in codeHashGate or argateHash in codeHashGate):
-                    continue
-                codeHashGate.append(argateHash)
-                codeHashGate.append(degateHash)
-                status = getRandomStatus()
-                seats_booked = 0
-                movie = 'FALSE'
-                meal = 'TRUE'
-                (year, month, day, hour, minute, second) = getArrival(year, month, day, hour, minute, second)
-                arrTime = turnSplitIntoTimestamp(year, month, day, hour, minute, second)
-                (year, month, day, hour, minute, second) = getDeparture(year, month, day, hour, minute, second)
-                depTime = turnSplitIntoTimestamp(year, month, day, hour, minute, second)
-                print("INSERT INTO flights\nVALUES('" + str(flightID) + "','" + str(boeingAircraft) + "','" + str(arrTime) + "','" + str(depTime) + "','" + str(deAirport) + "','" + str(arAirport) + "','" + str(degate) + "','" + str(argate) + "','" + str(status) + "','" + str(seats_booked) + "','" + str(150) + "','" + str(movie) + "','" + str(meal) + "','" + str(flight_cost) + "');")
-                flightID = flightID + 1
+        makeFlight(210, True, True, 700, 733, codeHashGate, year, month, day)
+        makeFlight(260, True, True, 300, 329, codeHashGate, year, month, day)
+        makeFlight(150, False, True, 760, 798, codeHashGate, year, month, day)
