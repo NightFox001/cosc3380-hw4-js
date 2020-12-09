@@ -69,16 +69,10 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
   }
 
   const updatePassengerData = (id, key, value) => {
-    console.log(value)
     setPassengers((passengers) => {
       const index = passengers.findIndex(passenger => passenger.id === id)
-      let passenger = passengers[index]
-      passenger[key] = value
-      console.log(passenger)
-      let newPassengers = [...passengers]
-      newPassengers.splice(index, 1)
-      newPassengers.push(passenger)
-      return newPassengers
+      passengers[index][key] = value
+      return JSON.parse(JSON.stringify(passengers))
     })
   }
 
@@ -149,12 +143,7 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
               type="name"
               margin="normal"
               value={passenger.name}
-              onChange={(e) => {
-                e.preventDefault()
-                updatePassengerData(passenger.id, 'name', e.target.value)
-              }}
-              inputProps={{ "data-id": index, "data-field-type": "name" }}
-              disableAutoFocus
+              onChange={(e) => updatePassengerData(passenger.id, 'name', e.target.value)}
               required
             />
             <br /><br />
@@ -165,8 +154,6 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
               margin="normal"
               value={passenger.email}
               onChange={(e) => updatePassengerData(passenger.id, 'email', e.target.value)}
-              inputProps={{ "data-id": index, "data-field-type": "email" }}
-              disableAutoFocus
             />
             <br /><br />
             <TextField
@@ -176,8 +163,6 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
               margin="normal"
               value={passenger.phone}
               onChange={(e) => updatePassengerData(passenger.id, 'phone', e.target.value)}
-              inputProps={{ "data-id": index, "data-field-type": "phone" }}
-              disableAutoFocus
             />
           </div>
         </Fragment>
