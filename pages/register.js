@@ -86,6 +86,7 @@ const Register = () => {
                     margin="normal"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    required
                 />
                 <br /><br />
                 <TextField
@@ -94,6 +95,7 @@ const Register = () => {
                     margin="normal"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                 />
                 <br /><br />
                 <TextField
@@ -102,6 +104,7 @@ const Register = () => {
                     margin="normal"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                 />
                 <br /><br />
                 <div style={{ width: 172, margin: 'auto' }}>

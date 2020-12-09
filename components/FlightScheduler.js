@@ -30,13 +30,13 @@ export const FlightScheduler = () => {
   const classes = useStyles()
   const router = useRouter()
   const [selectedDepartAirport, setSelectedDepartAirport] = useState("HOU")
-  const [selectedArriveAirport, setSelectedArriveAirport] = useState()
+  const [selectedArriveAirport, setSelectedArriveAirport] = useState("0")
   const [selectedDepartDate, setSelectedDepartDate] = useState(new Date())
   const [selectedReturnDate, setSelectedArriveDate] = useState(moment().add(1, "day").toDate())
   const [airports, setAirports] = useState([])
   const [loadingAirports, setLoadingAirports] = useState(true)
   const [tripType, setTripType] = useState("roundTrip")
-  const [selectedPassengers, setSelectedPassengers] = useState("1")
+  const [passengers, setPassengers] = useState("1")
 
   useEffect(() => {
       if (airports.length) {
@@ -62,8 +62,7 @@ export const FlightScheduler = () => {
   const searchFlights = async () => {
     const departDateFormatted = moment(selectedDepartDate).format('YYYY-MM-DD')
     const returnDateFormatted = moment(selectedReturnDate).format('YYYY-MM-DD')
-    console.log(departDateFormatted, returnDateFormatted)
-    router.push(`/flights?departAirport=${selectedDepartAirport}&arriveAirport=${selectedArriveAirport}&departDate=${departDateFormatted}&returnDate=${returnDateFormatted}&tripType=${tripType}`)
+    router.push(`/flights?departAirport=${selectedDepartAirport}&arriveAirport=${selectedArriveAirport}&departDate=${departDateFormatted}&returnDate=${returnDateFormatted}&passengers=${passengers}&tripType=${tripType}`)
   }
 
   return (
@@ -105,9 +104,9 @@ export const FlightScheduler = () => {
             <DropDownInput
                 title="Passengers"
                 options={["1","2","3","4","5"].map(number => ({ value: number, label: number }))}
-                selected={selectedPassengers}
+                selected={passengers}
                 defaultOption={{ label: "", value: "0" }}
-                onChange={setSelectedPassengers}
+                onChange={setPassengers}
               />
           </FlightSchedulerItem>         
           <FlightSchedulerItem> {/* [1,0] */}
@@ -136,10 +135,17 @@ export const FlightScheduler = () => {
             />
           </FlightSchedulerItem>
           <Grid item xs={12}>
-            <Button color="primary" onClick={searchFlights} variant="contained">Search</Button>
+            <Button
+              color="primary"
+              onClick={searchFlights}
+              variant="contained"
+              disabled={tripType === "roundTrip" && (!selectedArriveAirport || selectedArriveAirport === "0") || selectedArriveAirport === selectedDepartAirport}
+            >
+              Search
+            </Button>
           </Grid>
         </Grid>
-        </Paper>
-      </MuiPickersUtilsProvider>
+      </Paper>
+    </MuiPickersUtilsProvider>
   )
 }

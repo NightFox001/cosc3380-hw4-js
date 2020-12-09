@@ -8,14 +8,9 @@ const handler = async (req, res) => {
       departDate
     } = req.query
     
-    console.log('original', departDate)
     const dayAfterDepartFormatted = moment(departDate).add(1, 'day').format('YYYY-MM-DD')
     const departDateFormatted = moment(departDate).format('YYYY-MM-DD')
     
-    console.log('original', departDate)
-    console.log("depart date", departDateFormatted)
-    console.log("next date", dayAfterDepartFormatted)
-
     const nonstopFlights = await connection.query(
       `SELECT * \n
       FROM flights \n

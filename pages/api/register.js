@@ -3,7 +3,7 @@ import { connection, Sequelize } from '../../models'
 const handler = async (req, res) => {
     let customers
     try {
-        customers = await connection.query(`SELECT customer_email\n FROM customers`, {
+        customers = await connection.query(`SELECT customer_email\n FROM customers;`, {
             type: Sequelize.QueryTypes.SELECT
         });
     } 
@@ -11,7 +11,6 @@ const handler = async (req, res) => {
         return res.status(500).json({ message: error.message })
     }
 
-    // console.log(customers);
     const name = req.query?.name
     const email = req.query?.email //email entered by user
     const password = req.query?.password 
@@ -22,7 +21,7 @@ const handler = async (req, res) => {
         }
     }
     connection.query(`INSERT INTO customers (customer_name, customer_email, password, city) VALUES ('${name}', '${email}', '${password}', '${city}');`)
-    const customer = await connection.query(`SELECT *\n FROM customers`, {
+    const customer = await connection.query(`SELECT *\n FROM customers;`, {
         type: Sequelize.QueryTypes.SELECT
     });
     return res.json(customer)

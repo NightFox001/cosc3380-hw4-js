@@ -1,27 +1,160 @@
+import moment from 'moment';
+import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
 import Modal from '@material-ui/core/Modal';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import FlightIcon from '@material-ui/icons/Flight';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
+  modal: {
     position: 'absolute',
-    width: 400,
+    width: 'calc(100% - 40px)',
+    maxWidth: 700,
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  section: {
+    color: theme.palette.text.secondary,
+    backgroundColor: '#eaeaea',
+    marginBottom: 20,
+    overflow: 'hidden'
+  }
 }));
 
-export const CheckOutModal = ({ showModal, handleClose }) => {
+export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, departFlights, returnFlights, selectedDepartFlightIds, selectedReturnFlightIds }) => {
   const classes = useStyles();
+  const [passengers, setPassengers] = useState([])
+  
+  if (!numberOfPassengers) {
+    return null
+  }
+
+  const emptyPassengers = Array.from(Array(numberOfPassengers).keys())
+  const selectedDepartFlights = selectedDepartFlightIds.map((flightId) => departFlights.flat().find(({ flight_id }) => flight_id === flightId))
+  const selectedReturnFlights = selectedReturnFlightIds.map((flightId) => returnFlights.flat().find(({ flight_id }) => flight_id === flightId))
+
+  function getModalStyle() {
+    const top = 50;
+    const left = 50;
+  
+    return {
+      top: `${top}%`,
+      left: `${left}%`,
+      transform: `translate(-${top}%, -${left}%)`,
+    };
+  }
+  
+  const pricePerPass = ([...selectedDepartFlights, ...selectedReturnFlights].reduce((cost = 0, flight) => (cost + flight.flight_cost), 0) / 2).toFixed(2)
+  const taxesPerPass = (Number(pricePerPass) * 0.0825).toFixed(2)
+  const totalPerPass = (Number(pricePerPass) + Number(taxesPerPass)).toFixed(2)
+  const totalCost = (Number(totalPerPass) * numberOfPassengers).toFixed(2)
+
+  const getTravelTime = (flight) => {
+    return moment.utc(moment(flight.scheduled_arrival,"YYYY/MM/DD HH:mm:ss").diff(moment(flight.scheduled_departure,"YYYY/MM/DD HH:mm:ss"))).format("h[h] mm[m]")
+  }
+
+  const updatePassengerData = (index, key, value) => {
+    let passenger = passengers[index] || {}
+    passenger = { [key]: value, ...passenger }
+    let newPassengers = [...passengers]
+    newPassengers.splice(index, 1)
+    newPassengers.push(passenger)
+    setPassengers(newPassengers)
+  }
+
+  console.log(passengers)
 
   const body = (
-    <div style={modalStyle} className={classes.paper}>
-      <h2>Text in a modal</h2>
-      <p>
-        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-      </p>
-      <SimpleModal />
+    <div className={classes.modal} style={getModalStyle()}>
+      <h2>Passenger & Payment Info</h2>
+      <Paper className={classes.section}>
+        <div style={{ display: "flex", flex: 1 }}>
+          <div style={{ display: "flex", flex: 1, flexDirection: 'column' }}>
+            {selectedDepartFlights.map((flight, index) => (
+              <div style={{ display: "flex", alignItems: "center", padding: 20, borderTopWidth: index === 0 ? 0 : 1, borderTopStyle: 'solid', borderColor: '#ccc' }}>
+                <div style={{ minHeight: 40, minWidth: 40, borderRadius: "50%", backgroundColor: "#333", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <FlightIcon style={{ color: "white", transform: "rotate(45deg)" }} />
+                </div>
+                <h4 style={{ margin: 0, marginLeft: 20 }}>{moment(flight.scheduled_departure).format('MMM Do')}</h4>
+                <h2 style={{ margin: 0, marginLeft: 20 }}>{flight.departure_airport}</h2>
+                <ChevronRightIcon />
+                <h2 style={{ margin: 0 }}>{flight.arrival_airport}</h2>
+                <h4 style={{ margin: 0, marginLeft: 20 }}>{getTravelTime(flight)}</h4>
+              </div>
+            ))}
+            {selectedReturnFlights.map((flight) => (
+              <div style={{ display: "flex", alignItems: "center", padding: 20, borderTopWidth: 1, borderTopStyle: 'solid', borderColor: '#ccc' }}>
+                <div style={{ minHeight: 40, minWidth: 40, borderRadius: "50%", backgroundColor: "#ccc", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <FlightIcon style={{ color: "#222", transform: "rotate(-45deg)" }} />
+                </div>
+                <h4 style={{ margin: 0, marginLeft: 20 }}>{moment(flight.scheduled_departure).format('MMM Do')}</h4>
+                <h2 style={{ margin: 0, marginLeft: 20 }}>{flight.departure_airport}</h2>
+                <ChevronRightIcon />
+                <h2 style={{ margin: 0 }}>{flight.arrival_airport}</h2>
+                <h4 style={{ margin: 0, marginLeft: 20 }}>{getTravelTime(flight)}</h4>
+              </div>
+            ))}
+          </div>
+          <div style={{ maxWidth: 250, minWidth: 250, width: 250, minHeight: '100%', backgroundColor: '#ccc', padding: 20 }}>
+            <div style={{ display: "flex", flex: 1 }}>
+              <Typography style={{ display: "flex", flex: 1, marginBottom: 10 }}>Price per Passenger</Typography>
+            <h4 style={{ margin: 0 }}>{`$${pricePerPass}`}</h4>
+            </div>
+            <div style={{ display: "flex", flex: 1, marginBottom: 20 }}>
+              <Typography style={{ display: "flex", flex: 1 }}>Taxes and fees per Passenger</Typography>
+              <h4 style={{ margin: 0 }}>{`$${taxesPerPass}`}</h4>
+            </div>
+            <div style={{ display: "flex", flex: 1 }}>
+              <Typography style={{ display: "flex", flex: 1, marginBottom: 10 }}>Total per Passenger</Typography>
+              <h4 style={{ margin: 0 }}>{`$${totalPerPass}`}</h4>
+            </div>
+            <div style={{ display: "flex", flex: 1, marginBottom: 20 }}>
+              <Typography style={{ display: "flex", flex: 1 }}>Passenger(s)</Typography>
+              <h4 style={{ margin: 0 }}>x{numberOfPassengers}</h4>
+            </div>
+            <div style={{ display: "flex", flex: 1 }}>
+              <Typography style={{ display: "flex", flex: 1 }}>Flight total</Typography>
+              <h3 style={{ margin: 0 }}>{`$${totalCost}`}</h3>
+            </div>
+          </div>
+        </div>
+      </Paper>
+      {emptyPassengers.map((value, index) => (
+        <>
+          <Typography className={classes.heading}>{`Passenger ${index + 1}`}</Typography>
+          <Typography>
+            <TextField
+              label="Full Name"
+              type="name"
+              margin="normal"
+              value={passengers[index]?.name || ""}
+              onChange={(e) => updatePassengerData(index, 'name', e.target.value)}
+              required
+            />
+            <br /><br />
+            <TextField
+              label="Email"
+              type="email"
+              margin="normal"
+              value={passengers[index]?.email || ""}
+              onChange={(e) => updatePassengerData(index, 'email', e.target.value)}
+            />
+            <br /><br />
+            <TextField
+              label="Phone"
+              type="phone"
+              margin="normal"
+              value={passengers[index]?.phone || ""}
+              onChange={(e) => updatePassengerData(index, 'phone', e.target.value)}
+            />
+          </Typography>
+        </>
+      ))}
     </div>
   );
 
