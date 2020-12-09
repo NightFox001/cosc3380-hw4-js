@@ -1,3 +1,4 @@
+import axios from 'axios';
 import moment from 'moment';
 import { useState, useEffect, Fragment } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,6 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Modal from '@material-ui/core/Modal';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import FlightIcon from '@material-ui/icons/Flight';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
@@ -58,8 +60,15 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
       transform: `translate(-${top}%, -${left}%)`,
     };
   }
-  
-  const pricePerPass = ([...selectedDepartFlights, ...selectedReturnFlights].reduce((cost = 0, flight) => (cost + flight.flight_cost), 0) / 2).toFixed(2)
+
+  const firstFlights = []
+  if (selectedDepartFlights[0]) {
+    firstFlights.push(selectedDepartFlights[0])
+  }
+  if (selectedReturnFlights[0]) {
+    firstFlights.push(selectedReturnFlights[0])
+  }
+  const pricePerPass = (firstFlights.reduce((cost = 0, flight) => (cost + flight.flight_cost), 0)).toFixed(2)
   const taxesPerPass = (Number(pricePerPass) * 0.0825).toFixed(2)
   const totalPerPass = (Number(pricePerPass) + Number(taxesPerPass)).toFixed(2)
   const totalCost = (Number(totalPerPass) * numberOfPassengers).toFixed(2)
@@ -75,8 +84,27 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
       return JSON.parse(JSON.stringify(passengers))
     })
   }
+  
 
-  console.log(passengers)
+  // Purchase button clicked
+  const handlePurchase = async () => {
+    try {
+      const userString = localStorage.getItem("user")
+      const user = JSON.parse(userString)
+      const response = await axios.post(`/api/createBooking`, {
+        // send these to createBooking.js
+        user,
+        passengers,
+        test : "Hello",
+        totalCost,
+        taxesPerPass,
+        numberOfPassengers,
+        
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const body = (
     <div className={classes.modal} style={getModalStyle()}>
@@ -167,6 +195,7 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
           </div>
         </Fragment>
       ))}
+      <Button color="primary" onClick={handlePurchase} variant="contained">Log In</Button>
     </div>
   );
 

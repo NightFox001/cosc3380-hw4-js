@@ -21,10 +21,10 @@ const handler = async (req, res) => {
         }
     }
     connection.query(`INSERT INTO customers (customer_name, customer_email, password, city) VALUES ('${name}', '${email}', '${password}', '${city}');`)
-    const customer = await connection.query(`SELECT *\n FROM customers;`, {
+    const customer = await connection.query(`SELECT *\n FROM customers WHERE customer_email = '${email}';`, {
         type: Sequelize.QueryTypes.SELECT
     });
-    return res.json(customer)
+    return res.json(customer[0])
 }
 
 export default handler
