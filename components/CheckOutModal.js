@@ -1,5 +1,6 @@
 import moment from 'moment';
-import { useState } from 'react';
+import { useState, useEffect, Fragment } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -14,6 +15,8 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     width: 'calc(100% - 40px)',
     maxWidth: 700,
+    maxHeight: '80vh',
+    overflow: 'scroll',
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
@@ -29,12 +32,19 @@ const useStyles = makeStyles((theme) => ({
 export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, departFlights, returnFlights, selectedDepartFlightIds, selectedReturnFlightIds }) => {
   const classes = useStyles();
   const [passengers, setPassengers] = useState([])
+
+  useEffect(() => {
+    if (!!numberOfPassengers) {
+      const emptyPassengers = Array.from(Array(numberOfPassengers).keys())
+      const newPassengers = emptyPassengers.map(() => ({ id: uuidv4(), name: "", email: "", phone: "" }))
+      setPassengers(newPassengers)
+    }
+  }, [numberOfPassengers])
   
   if (!numberOfPassengers) {
     return null
   }
 
-  const emptyPassengers = Array.from(Array(numberOfPassengers).keys())
   const selectedDepartFlights = selectedDepartFlightIds.map((flightId) => departFlights.flat().find(({ flight_id }) => flight_id === flightId))
   const selectedReturnFlights = selectedReturnFlightIds.map((flightId) => returnFlights.flat().find(({ flight_id }) => flight_id === flightId))
 
@@ -58,13 +68,18 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
     return moment.utc(moment(flight.scheduled_arrival,"YYYY/MM/DD HH:mm:ss").diff(moment(flight.scheduled_departure,"YYYY/MM/DD HH:mm:ss"))).format("h[h] mm[m]")
   }
 
-  const updatePassengerData = (index, key, value) => {
-    let passenger = passengers[index] || {}
-    passenger = { [key]: value, ...passenger }
-    let newPassengers = [...passengers]
-    newPassengers.splice(index, 1)
-    newPassengers.push(passenger)
-    setPassengers(newPassengers)
+  const updatePassengerData = (id, key, value) => {
+    console.log(value)
+    setPassengers((passengers) => {
+      const index = passengers.findIndex(passenger => passenger.id === id)
+      let passenger = passengers[index]
+      passenger[key] = value
+      console.log(passenger)
+      let newPassengers = [...passengers]
+      newPassengers.splice(index, 1)
+      newPassengers.push(passenger)
+      return newPassengers
+    })
   }
 
   console.log(passengers)
@@ -124,36 +139,48 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
           </div>
         </div>
       </Paper>
-      {emptyPassengers.map((value, index) => (
-        <>
+      {passengers.map((passenger, index) => (
+        <Fragment key={passenger.id}>
           <Typography className={classes.heading}>{`Passenger ${index + 1}`}</Typography>
-          <Typography>
+          <div name={passenger.id}>
             <TextField
+              name={`${passenger.id}-fullname`}
               label="Full Name"
               type="name"
               margin="normal"
-              value={passengers[index]?.name || ""}
-              onChange={(e) => updatePassengerData(index, 'name', e.target.value)}
+              value={passenger.name}
+              onChange={(e) => {
+                e.preventDefault()
+                updatePassengerData(passenger.id, 'name', e.target.value)
+              }}
+              inputProps={{ "data-id": index, "data-field-type": "name" }}
+              disableAutoFocus
               required
             />
             <br /><br />
             <TextField
+              name={`${passenger.id}-email`}
               label="Email"
               type="email"
               margin="normal"
-              value={passengers[index]?.email || ""}
-              onChange={(e) => updatePassengerData(index, 'email', e.target.value)}
+              value={passenger.email}
+              onChange={(e) => updatePassengerData(passenger.id, 'email', e.target.value)}
+              inputProps={{ "data-id": index, "data-field-type": "email" }}
+              disableAutoFocus
             />
             <br /><br />
             <TextField
+              name={`${passenger.id}-email`}
               label="Phone"
               type="phone"
               margin="normal"
-              value={passengers[index]?.phone || ""}
-              onChange={(e) => updatePassengerData(index, 'phone', e.target.value)}
+              value={passenger.phone}
+              onChange={(e) => updatePassengerData(passenger.id, 'phone', e.target.value)}
+              inputProps={{ "data-id": index, "data-field-type": "phone" }}
+              disableAutoFocus
             />
-          </Typography>
-        </>
+          </div>
+        </Fragment>
       ))}
     </div>
   );
