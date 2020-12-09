@@ -37,11 +37,13 @@ const handler = async (req, res) => {
             f1.scheduled_arrival as f1_scheduled_arrival, \n
             f1.departure_airport as f1_departure_airport, \n
             f1.arrival_airport as f1_arrival_airport, \n
+            f1.flight_cost as f1_flight_cost, \n
             f2.flight_id as f2_flight_id, \n
             f2.scheduled_departure as f2_scheduled_departure, \n
             f2.scheduled_arrival as f2_scheduled_arrival, \n
             f2.departure_airport as f2_departure_airport, \n
-            f2.arrival_airport as f2_arrival_airport \n
+            f2.arrival_airport as f2_arrival_airport, \n
+            f2.flight_cost as f2_flight_cost \n
         FROM flights as f1 \n
         INNER JOIN flights as f2 \n
             on f1.flight_id <> f2.flight_id \n
@@ -67,6 +69,7 @@ const handler = async (req, res) => {
             scheduled_arrival: flight.f1_scheduled_arrival,
             departure_airport: flight.f1_departure_airport,
             arrival_airport: flight.f1_arrival_airport,
+            flight_cost: flight.f1_flight_cost,
         },
         {
             flight_id: flight.f2_flight_id,
@@ -74,6 +77,7 @@ const handler = async (req, res) => {
             scheduled_arrival: flight.f2_scheduled_arrival,
             departure_airport: flight.f2_departure_airport,
             arrival_airport: flight.f2_arrival_airport,
+            flight_cost: flight.f2_flight_cost,
         }
     ]))
 

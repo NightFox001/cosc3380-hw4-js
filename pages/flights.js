@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import CheckIcon from '@material-ui/icons/Check';
 import { makeStyles } from '@material-ui/core/styles';
 import moment, { tz } from "moment"
 
@@ -22,7 +24,9 @@ const Flights = () => {
   const [departFlights, setDepartFlights] = useState([])
   const [returnFlights, setReturnFlights] = useState([])
   const [loading, setLoading] = useState(true)
-  const [selectedReturnFlight, setSelectedReturnFlight] = useState(false)
+  const [selectedDepartFlights, setSelectedDepartFlights] = useState([])
+  const [selectedReturnFlights, setSelectedReturnFlights] = useState([])
+
   const {
     departAirport,
     arriveAirport,
@@ -74,7 +78,7 @@ const Flights = () => {
             borderColor: "rgba(0,0,0,0.1)"
             }}>
             <Grid item xs={2}>
-              Flight ID
+              Flight ID(s)
             </Grid>
             <Grid item xs={2}>
               Depart
@@ -111,6 +115,9 @@ const Flights = () => {
               moment.utc(moment(firstFlight.scheduled_departure,"YYYY/MM/DD HH:mm:ss").diff(moment(secondFlight.scheduled_arrival,"YYYY/MM/DD HH:mm:ss"))).format("h[h] mm[m]") 
               : moment.utc(moment(firstFlight.scheduled_departure,"YYYY/MM/DD HH:mm:ss").diff(moment(firstFlight.scheduled_arrival,"YYYY/MM/DD HH:mm:ss"))).format("h[h] mm[m]")
             )
+
+            const selected = selectedDepartFlights.includes(firstFlight.flight_id) && (!isConnectingFlight || selectedDepartFlights.includes(secondFlight.flight_id))
+
             return (
               <Grid container spacing={2}>
                 <Grid item xs={2}>
@@ -126,8 +133,20 @@ const Flights = () => {
                 <Grid item xs={2}>
                   {numStops}
                 </Grid>
-                <Grid>
+                <Grid item xs={2}>
                   {travelTime}
+                </Grid>
+                <Grid item xs={2}>
+                  <Button
+                    color={selected ? "primary" : "default"}
+                    variant="contained"
+                    onClick={() => setSelectedDepartFlights(
+                      isConnectingFlight ? [firstFlight.flight_id, secondFlight.flight_id] : [firstFlight.flight_id]
+                    )}
+                    startIcon={selected ? <CheckIcon /> : null}
+                  >
+                    {`$${firstFlight.flight_cost}`}
+                  </Button>
                 </Grid>
               </Grid>
             )
@@ -145,7 +164,7 @@ const Flights = () => {
             borderColor: "rgba(0,0,0,0.1)"
             }}>
             <Grid item xs={2}>
-              Flight ID
+              Flight ID(s)
             </Grid>
             <Grid item xs={2}>
               Depart
@@ -172,6 +191,7 @@ const Flights = () => {
               firstFlight = flight
             }
             
+            
             const departTime = moment(firstFlight.scheduled_departure).format('h:mma')
             const arriveTime = moment(
               isConnectingFlight ? secondFlight.scheduled_arrival : firstFlight.scheduled_arrival
@@ -182,6 +202,9 @@ const Flights = () => {
               moment.utc(moment(firstFlight.scheduled_departure,"YYYY/MM/DD HH:mm:ss").diff(moment(secondFlight.scheduled_arrival,"YYYY/MM/DD HH:mm:ss"))).format("h[h] mm[m]") 
               : moment(firstFlight.scheduled_arrival).format("h[h] mm[m]")
             )
+
+                const selected = selectedReturnFlights.includes(firstFlight.flight_id) && (!isConnectingFlight || selectedReturnFlights.includes(secondFlight.flight_id))
+
                 return (
                   <Grid container spacing={2}>
                     <Grid item xs={2}>
@@ -197,13 +220,34 @@ const Flights = () => {
                     <Grid item xs={2}>
                       {numStops}
                     </Grid>
-                    <Grid>
+                    <Grid item xs={2}>
                       {travelTime}
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Button
+                        color={selected ? "primary" : "default"}
+                        variant="contained"
+                        onClick={() => setSelectedReturnFlights(
+                          isConnectingFlight ? [firstFlight.flight_id, secondFlight.flight_id] : [firstFlight.flight_id]
+                        )}
+                        startIcon={selected ? <CheckIcon /> : null}
+                      >
+                        {`$${firstFlight.flight_cost}`}
+                      </Button>
                     </Grid>
                   </Grid>
                 )
               })}
             </Paper>
+            <Grid container>
+              <Button
+                style={{ marginTop: 20 }}
+                variant="contained"
+                disabled={selectedDepartFlights.length === 0 || selectedReturnFlights.length === 0}
+              >
+                Continue
+              </Button>
+            </Grid>
           </>
         )}
       </div>
