@@ -154,7 +154,7 @@ const Flights = () => {
         </Paper>
         {tripType === "roundTrip" && (
           <>
-            <h1 style={{ color: 'white', fontWeight: 900 }}>{`Arrive ${arriveAirport} -> ${departAirport}`}</h1>
+            <h1 style={{ color: 'white', fontWeight: 900 }}>{`Return ${arriveAirport} -> ${departAirport}`}</h1>
 
             <Paper className={classes.paper}>
             <Grid container spacing={2} style={{
