@@ -59,6 +59,15 @@ export const FlightScheduler = () => {
     setTimeout(getAirports, 0)
   }, [])
 
+  const handleLogOut = () => {
+    localStorage.removeItem('user')
+    router.push('/login')
+  }
+
+  const navigateToBookings = () => {
+    router.push('/bookings')
+  }
+
   const searchFlights = async () => {
     const departDateFormatted = moment(selectedDepartDate).format('YYYY-MM-DD')
     const returnDateFormatted = moment(selectedReturnDate).format('YYYY-MM-DD')
@@ -68,6 +77,20 @@ export const FlightScheduler = () => {
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <h1 style={{ color: 'white', fontWeight: 900 }}>Flights</h1>
+      <div style={{ display: 'flex' }}>
+        <Button
+          onClick={navigateToBookings}
+          variant="contained"
+        >
+          Bookings
+        </Button>
+        <Button
+          onClick={handleLogOut}
+          variant="contained"
+        >
+          Log Out
+        </Button>
+      </div>
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -99,7 +122,7 @@ export const FlightScheduler = () => {
               value={selectedDepartDate}
               onChange={setSelectedDepartDate}
             />
-          </FlightSchedulerItem>         
+          </FlightSchedulerItem>
           <FlightSchedulerItem> {/* [0,2] */}
             <DropDownInput
                 title="Passengers"
