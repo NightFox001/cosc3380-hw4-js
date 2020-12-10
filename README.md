@@ -4,13 +4,13 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 First, run the development server:
 
-```bash
+# run these commands and it will be up
 npm install
 npm run build
 npm run start
 # or
 yarn dev
-```
+
 
 Go to your preferred web browser and enter this into the URL:
 http://localhost:3000/login
