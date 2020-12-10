@@ -24,10 +24,8 @@ CREATE TABLE "tickets" (
   "ticket_cost" integer,
   "waitlist_no" integer,
   "boarding_pass_id" integer
-  --PRIMARY KEY ("ticket_id")
 );
 
---CREATE INDEX "Key" ON  "tickets" ("ticket_cost", "waitlist_no");
 
 CREATE TABLE "flights" (
   "flight_id" SERIAL PRIMARY KEY,
@@ -44,10 +42,8 @@ CREATE TABLE "flights" (
   "movie" bool,
   "meal" bool,
   "flight_cost" float(7)
-  --PRIMARY KEY ("flight_id")
 );
 
---CREATE INDEX "Key" ON  "flights" ("scheduled_departure", "scheduled_arrival", "status", "waitlist_no", "seats_available", "movie", "meal", "flight_cost");
 
 CREATE TABLE "passengers" (
   "passenger_id" SERIAL PRIMARY KEY,
@@ -55,19 +51,15 @@ CREATE TABLE "passengers" (
   "passenger_name" text NOT NULL,
   "phone" char(15),
   "email" varchar(30)
-  --PRIMARY KEY ("passenger_id")
 );
 
---CREATE INDEX "Key" ON  "passengers" ("passenger_name", "phone", "email");
 
 CREATE TABLE "boarding_passes" (
   "boarding_pass_id" SERIAL PRIMARY KEY,
   "boarding_gate" char(3) NOT NULL,
   "boarding_time" timestamp
-  --PRIMARY KEY ("boarding_pass_id")
 );
 
---CREATE INDEX "Key" ON  "boarding_passes" ("boarding_time");
 
 CREATE TABLE "gates" (
   "gates" char(3) NOT NULL,
@@ -81,7 +73,6 @@ CREATE TABLE "airports" (
   PRIMARY KEY ("airport_id")
 );
 
---CREATE INDEX "Key" ON  "airports" ("airport_name", "city");
 
 CREATE TABLE "aircraft_details" (
   "model" char(25) NOT NULL,
@@ -91,7 +82,6 @@ CREATE TABLE "aircraft_details" (
   PRIMARY KEY ("model")
 );
 
---CREATE INDEX "Key" ON  "aircraft_details" ("max_seats", "has_screens", "has_kitchen");
 
 CREATE TABLE "customers" (
   "customer_id" SERIAL PRIMARY KEY,
@@ -99,19 +89,15 @@ CREATE TABLE "customers" (
   "customer_email" varchar(30) UNIQUE,
   "password" text NOT NULL,
   "city" char(20)
-  --PRIMARY KEY ("customer_id")
 );
 
---CREATE INDEX "Key" ON  "customers" ("customer_name", "customer_email", "password", "city");
 
 CREATE TABLE "baggages" (
   "bag_id" SERIAL PRIMARY KEY,
   "passenger_id" integer NOT NULL,
   "weight" float(7)
-  --PRIMARY KEY ("bag_id")
 );
 
---CREATE INDEX "Key" ON  "baggages" ("weight");
 
 CREATE TABLE "bookings" (
   "book_id" SERIAL PRIMARY KEY,
@@ -120,19 +106,14 @@ CREATE TABLE "bookings" (
   "card_no" integer NOT NULL,
   "total" float(10) NOT NULL,
   "taxes" float(7) NOT NULL
-  --PRIMARY KEY ("book_id")
 );
 
---CREATE INDEX "Key" ON  "bookings" ("book_date", "card_no", "total", "taxes");
 
 CREATE TABLE "aircrafts_in_service" (
   "aircraft_code" char(3) NOT NULL,
   "model" char(25) NOT NULL,
   PRIMARY KEY ("aircraft_code")
 );
-
-
-
 
 
 /*aircraft_details*/

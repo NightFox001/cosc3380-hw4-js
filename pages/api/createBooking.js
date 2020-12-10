@@ -5,20 +5,12 @@ import moment from 'moment';
 
 const handler = async (req, res) => {
     if (req.method === 'POST') {
-        
-        
         // connection.query('BEGIN;')
-
-        // BOOKINGS
-        // const customer_id = req.body.
-        // const card_no = req.body. 
 
         const { user: { customer_email: email } } = req.body
         const book_date = moment().format("YYYY-MM-DD");
 
         console.log(`\n\n\n`)
-        console.log(req.body)
-
         const allFlights = req.body.flights
         const passengers = req.body.passengers
         const numberOfPassengers = req.body.numberOfPassengers
@@ -92,6 +84,7 @@ const handler = async (req, res) => {
                 connection.query(`ROLLBACK;`) // Rollback any passengers and booking created in this transaction
                 return res.status(500).json({ message: error.message })
             }
+        }
 
 // Insert PASSENGERS
         for (let i = 0; i < allFlights.length; i += 1 ) {
@@ -106,11 +99,9 @@ const handler = async (req, res) => {
 
                 let passenger_id
                 try { // get that pasenger's id
-                    passenger_id = await connection.query(`\
-                        SELECT passenger_id \n\
-                        FROM passengers \n\
-                        WHERE email = '${passEmail}';`, { type: Sequelize.QueryTypes.SELECT });
-                    passenger_id = passenger_id[0].passenger_id
+                let result1 = await connection.query(`SELECT MAX(passenger_id) FROM passengers;`, { type: Sequelize.QueryTypes.SELECT });
+                        console.log(' result1 = ', result1)
+                    passenger_id = result1[0].max - numberOfPassengers+j+1 
                 } 
                 catch (error) {
                     console.log(`\n\n\n\n(In createBooking.js)\n tried to get passenger_id, but got this error... \n
@@ -205,11 +196,11 @@ const handler = async (req, res) => {
             console.log('booking not commited to DB')
             connection.query(`ROLLBACK;`) // Rollback any tickets, passengers, and booking created in this transaction
             return res.status(500).json({ message: error.message })
-        }
-        // else if (req.method === 'POST') { 
-        }
-        return
     }
+    // else if (req.method === 'POST') { 
+    }
+    return
+    
 }
 
 export default handler
