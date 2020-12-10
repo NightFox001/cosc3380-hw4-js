@@ -35,22 +35,22 @@ SELECT COUNT(*) AS tickets_purchased, book_id, ticket_cost, flights.flight_id, s
 				{ type: Sequelize.QueryTypes.SELECT });
 			let book_map = new Map()
 			ticket_info.forEach((e) => {
-				let book_info = {
-					ticket_cost: e.ticket_cost,
-					tickets_purchased: e.tickets_purchased,
-					scheduled_departure: e.scheduled_departure,
-					scheduled_arrival: e.scheduled_arrival,
-					arrival_airport: e.arrival_airport_id,
-					adeparture_airport: e.departure_airport_id,
-					movie: e.movie,
-					meal: e.meal
-				}
-				if (book_map[e.book_id] === undefined) {
-					book_map[e.book_id] = []
-					book_map[e.book_id].push(book_info)
-				} else {
-					book_map[e.book_id].push(book_info)
-				}
+					let book_info = {
+						ticket_cost: e.ticket_cost,
+						tickets_purchased: e.tickets_purchased,
+						scheduled_departure: e.scheduled_departure,
+						scheduled_arrival: e.scheduled_arrival,
+						arrival_airport: e.arrival_airport_id,
+						adeparture_airport: e.departure_airport_id,
+						movie: e.movie,
+						meal: e.meal
+					}
+					if (book_map[e.book_id] === undefined) {
+						book_map[e.book_id] = []
+						book_map[e.book_id].push(book_info)
+					} else {
+						book_map[e.book_id].push(book_info)
+					}
 			});
 			console.log(book_map)
 			return res.json(book_map)
