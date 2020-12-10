@@ -45,6 +45,7 @@ const Login = () => {
                     margin="normal"
                     value={email}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                 />
                 <br /><br />
                 <TextField
@@ -53,6 +54,7 @@ const Login = () => {
                     margin="normal"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                 />
                 <br /><br />
                 <Button color="primary" onClick={handleLogin} variant="contained">Log In</Button>
