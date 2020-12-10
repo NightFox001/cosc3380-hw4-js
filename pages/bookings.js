@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 const Bookings = () => {
 	const classes = useStyles();
 	const router = useRouter();
-	const [bookings, setBookings] = useState([])
+	const [bookings, setBookings] = useState({})
 
 	const handleLogOut = () => {
 		localStorage.removeItem('user')
@@ -67,22 +67,16 @@ const Bookings = () => {
 		setTimeout(handleGetBookings, 0)
 	},[])
 	
-	const renderBooking = () => {
-		console.log(bookings)
-		console.log('got bookings in func')
-		let book_ids = Array.from(bookings.keys() );
-		console.log(book_ids)
-		// {bookings.map((booking) => {
-		// 	<h2>{booking}</h2>
-		// })}
-
+	const renderBooking = (book_id) => {
+		const tickets = bookings[book_id]
 		let predefinedBlock = (
 		// map over booking ids
 		<div>
 			<h2>Your Bookings</h2>
 			{/* {bookings.map((booking, index) => { */}
 				<div>
-					<h2>Booking</h2>
+					<h2>{`Booking #${book_id}`}</h2>
+					{tickets.map((ticket) => (
 					<Paper className={classes.section}>
 						<div style={{ display: "flex", flex: 1 }}>
 						<div style={{ display: "flex", flex: 1, flexDirection: 'column' }}>
@@ -131,13 +125,17 @@ const Bookings = () => {
 						</div>
 						</div>
 					</Paper>
+					))}
 				</div>
-			{/* })} */}
 		</div>
 
 		)
 		return predefinedBlock
 	}
+	console.log(bookings)
+	console.log('got bookings in func')
+	let book_ids = Object.keys(bookings)
+	console.log(book_ids)
 
   return (
     <>
@@ -157,8 +155,7 @@ const Bookings = () => {
       </Button>
     </div>
 		{/* {handleGetBookings()} */}
-		{renderBooking()}
-		{renderBooking()}
+		{book_ids.map(renderBooking)}
     </>
   )
 }
