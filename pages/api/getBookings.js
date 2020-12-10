@@ -9,12 +9,12 @@ const handler = async (req, res) => {
 		let ticket_info
 		try { // get book_id from customers where customer_email = 'email'
 			ticket_info = await connection.query(`
-SELECT COUNT(*) AS tickets_purchased, book_id, ticket_cost, flights.flight_id, scheduled_departure, scheduled_arrival, arrival_airport_id, departure_airport_id, movie, meal\n
+				SELECT COUNT(*) AS tickets_purchased, ticket_id, book_id, ticket_cost, flights.flight_id, scheduled_departure, scheduled_arrival, arrival_airport_id, departure_airport_id, movie, meal\n
 				FROM flights, (\n
-					SELECT flight_id, book_id, ticket_cost\n
+					SELECT flight_id, ticket_id, book_id, ticket_cost\n
 					FROM tickets\n
 					INNER JOIN passengers ON passengers.passenger_id = tickets.passenger_id \n
-					GROUP BY tickets.flight_id, passengers.book_id, tickets.ticket_cost, passengers.passenger_id\n
+					GROUP BY tickets.flight_id, passengers.book_id, tickets.ticket_cost, passengers.passenger_id, tickets.ticket_id\n
 					HAVING passengers.passenger_id IN (\n
 						SELECT passenger_id\n
 						FROM passengers\n
@@ -24,24 +24,25 @@ SELECT COUNT(*) AS tickets_purchased, book_id, ticket_cost, flights.flight_id, s
 							WHERE customer_id IN (\n
 								SELECT customer_id\n
 								FROM customers\n
-								WHERE customer_email = '${email}'\n
+								WHERE customer_email = 'bitch@aol.com'\n
 							)\n
 						)\n
 					)\n
 				)a\n
 				WHERE flights.flight_id = a.flight_id\n
-				GROUP BY flights.flight_id, a.book_id, a.ticket_cost;\n
+				GROUP BY flights.flight_id, a.book_id, a.ticket_cost, a.ticket_id;\n
 				`, 
 				{ type: Sequelize.QueryTypes.SELECT });
 			let book_map = new Map()
 			ticket_info.forEach((e) => {
 					let book_info = {
 						ticket_cost: e.ticket_cost,
+						ticket_id: e.ticket_id,
 						tickets_purchased: e.tickets_purchased,
 						scheduled_departure: e.scheduled_departure,
 						scheduled_arrival: e.scheduled_arrival,
 						arrival_airport: e.arrival_airport_id,
-						adeparture_airport: e.departure_airport_id,
+						departure_airport: e.departure_airport_id,
 						movie: e.movie,
 						meal: e.meal
 					}
@@ -52,7 +53,6 @@ SELECT COUNT(*) AS tickets_purchased, book_id, ticket_cost, flights.flight_id, s
 						book_map[e.book_id].push(book_info)
 					}
 			});
-			console.log(book_map)
 			return res.json(book_map)
 		} 
 		catch (error) {
