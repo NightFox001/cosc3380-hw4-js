@@ -9,25 +9,30 @@ const handler = async (req, res) => {
 		let ticket_info
 		try { // get book_id from customers where customer_email = 'email'
 			ticket_info = await connection.query(`
-				SELECT COUNT(*) AS tickets_purchased, ticket_cost, scheduled_departure, scheduled_arrival, arrival_airport_id, departure_airport_id, movie, meal
-				FROM tickets t, flights f
-				WHERE t.flight_id = f.flight_id AND passenger_id IN (
-					SELECT passenger_id
-					FROM passengers
-					WHERE book_id IN (
-						SELECT book_id
-						FROM bookings
-						WHERE customer_id IN (
-							SELECT customer_id
-							FROM customers
-							WHERE customer_email = '${email}'
-						)
-					)
-				)
-				GROUP BY ticket_id, f.flight_id;
-				\n`, 
+SELECT COUNT(*) AS tickets_purchased, book_id, ticket_cost, flight_id, scheduled_departure, scheduled_arrival, arrival_airport_id, departure_airport_id, movie, meal\n
+				FROM flights, (\n
+					SELECT flight_id, book_id, ticket_cost\n
+					FROM tickets\n
+					INNER JOIN passengers ON passengers.passenger_id = tickets.passenger_id \n
+					GROUP BY tickets.flight_id, passengers.book_id, tickets.ticket_cost, passengers.passenger_id\n
+					HAVING passengers.passenger_id IN (\n
+						SELECT passenger_id\n
+						FROM passengers\n
+						WHERE book_id IN (\n
+							SELECT book_id\n
+							FROM bookings\n
+							WHERE customer_id IN (\n
+								SELECT customer_id\n
+								FROM customers\n
+								WHERE customer_email = 'youareabitch@aol.com'\n
+							)\n
+						)\n
+					)\n
+				)a\n
+				WHERE flights.flight_id = a.flight_id\n
+				GROUP BY flights.flight_id, a.book_id, a.ticket_cost;\n
+				`, 
 				{ type: Sequelize.QueryTypes.SELECT });
-			console.log(ticket_info)
 			return res.json(ticket_info)
 		} 
 		catch (error) {

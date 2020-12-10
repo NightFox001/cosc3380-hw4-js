@@ -6,6 +6,8 @@ import FlightIcon from '@material-ui/icons/Flight';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -29,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 const Bookings = () => {
   const classes = useStyles();
   const router = useRouter();
+	const [bookings, setBookings] = useState([])
 
   const handleLogOut = () => {
     localStorage.removeItem('user')
@@ -39,70 +42,22 @@ const Bookings = () => {
     router.push('/')
   }
 
-	const handleGetBookings = async () => {
-		console.log('getting bookings....')
-		try {
-			const userString = localStorage.getItem("user")
-			const user = JSON.parse(userString)
-			const email = user.customer_email;
-			const booking_info = await axios.get(`/api/getBookings?email=${email}`)
-		} catch (error) {
-			console.log(error)
+
+	usrEffect(() => {
+		const handleGetBookings = async () => {
+			console.log('getting bookings....')
+			try {
+				const userString = localStorage.getItem("user")
+				const user = JSON.parse(userString)
+				const email = user.customer_email;
+				booking_info = await axios.get(`/api/getBookings?email=${email}`)
+				setBookings(booking_info.data)
+			} catch (error) {
+				console.log(error)
+				setBookings([])
+			}
 		}
 	}
-
-  const renderBooking = () => {
-    return (
-      <Paper className={classes.section}>
-        <div style={{ display: "flex", flex: 1 }}>
-          <div style={{ display: "flex", flex: 1, flexDirection: 'column' }}>
-              <div style={{ display: "flex", alignItems: "center", padding: 20, borderTopWidth: 0, borderTopStyle: 'solid', borderColor: '#ccc' }}>
-                <div style={{ minHeight: 40, minWidth: 40, borderRadius: "50%", backgroundColor: "#333", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <FlightIcon style={{ color: "white", transform: "rotate(45deg)" }} />
-                </div>
-                <h4 style={{ margin: 0, marginLeft: 20 }}>Dec 19th</h4>
-                <h2 style={{ margin: 0, marginLeft: 20 }}>MIA</h2>
-                <ChevronRightIcon />
-                <h2 style={{ margin: 0 }}>HOU</h2>
-                <h4 style={{ margin: 0, marginLeft: 20 }}>2 hr 20 min</h4>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", padding: 20, borderTopWidth: 1, borderTopStyle: 'solid', borderColor: '#ccc' }}>
-                <div style={{ minHeight: 40, minWidth: 40, borderRadius: "50%", backgroundColor: "#ccc", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <FlightIcon style={{ color: "#222", transform: "rotate(-45deg)" }} />
-                </div>
-                <h4 style={{ margin: 0, marginLeft: 20 }}>Dec 31st</h4>
-                <h2 style={{ margin: 0, marginLeft: 20 }}>HOU</h2>
-                <ChevronRightIcon />
-                <h2 style={{ margin: 0 }}>MIA</h2>
-                <h4 style={{ margin: 0, marginLeft: 20 }}>2 hr 20 m</h4>
-              </div>
-          </div>
-          <div style={{ maxWidth: 250, minWidth: 250, width: 250, minHeight: '100%', backgroundColor: '#ccc', padding: 20 }}>
-            <div style={{ display: "flex", flex: 1 }}>
-              <Typography style={{ display: "flex", flex: 1, marginBottom: 10 }}>Price per Passenger</Typography>
-            <h4 style={{ margin: 0 }}>{`$${123}`}</h4>
-            </div>
-            <div style={{ display: "flex", flex: 1, marginBottom: 20 }}>
-              <Typography style={{ display: "flex", flex: 1 }}>Passenger(s)</Typography>
-              <h4 style={{ margin: 0 }}>`$${123}`</h4>
-            </div>
-            <div style={{ display: "flex", flex: 1 }}>
-              <Typography style={{ display: "flex", flex: 1 }}>Subtotal</Typography>
-              <h3 style={{ margin: 0 }}>{`$${123}`}</h3>
-            </div>
-            <div style={{ display: "flex", flex: 1 }}>
-              <Typography style={{ display: "flex", flex: 1, marginBottom: 10 }}>Tax</Typography>
-              <h4 style={{ margin: 0 }}>{`$${123}`}</h4>
-            </div>
-            <div style={{ display: "flex", flex: 1 }}>
-              <Typography style={{ display: "flex", flex: 1, marginBottom: 10 }}>Total</Typography>
-              <h4 style={{ margin: 0 }}>{`$${123}`}</h4>
-            </div>
-          </div>
-        </div>
-      </Paper>
-    )
-  }
 
   return (
     <>
@@ -123,10 +78,66 @@ const Bookings = () => {
       <Button color="primary" onClick={handleGetBookings} variant="contained">Get Bookings</Button>
 
     </div>
-		<script>
-		renderBooking()
-		</script>
-      {renderBooking()}
+		<div>
+		 <Paper className={classes.flightsSection}>
+			 <Grid container spacing={2} style={{
+					paddingTop: 10,
+					paddingBottom: 10,
+					borderBottomWidth: 1,
+					borderColor: "rgba(0,0,0,0.1)"
+					}}>
+					<Grid item xs={2}>
+						Flight ID(s)
+					</Grid>
+					<Grid item xs={2}>
+						arrival airport
+					</Grid>
+					<Grid item xs={2}>
+						departure airport
+					</Grid>
+					<Grid item xs={2}>
+						scheduled departure
+					</Grid>
+					<Grid item xs={2}>
+						ticket cost
+					</Grid>
+					<Grid item xs={2}>
+						total
+					</Grid>
+				</Grid>
+				{bookings.map((booking) => {
+				 <Grid container spacing={2} style={{
+						paddingTop: 10,
+						paddingBottom: 10,
+						borderBottomWidth: 1,
+						borderColor: "rgba(0,0,0,0.1)"
+						}}>
+						<Grid item xs={2}>
+						{booking[0]}
+						</Grid>
+						<Grid item xs={2}>
+						{arrival_airport}
+						</Grid>
+						<Grid item xs={2}>
+						{departure_airport}
+						</Grid>
+						<Grid item xs={2}>
+						{scheduled_departure}
+						</Grid>
+						<Grid item xs={2}>
+						{ticket_cost}
+						</Grid>
+						<Grid item xs={2}>
+						{total}
+						</Grid>
+					</Grid>
+				})
+				}
+			</Paper>
+		</div>
+		{
+
+		}
     </>
   )
 }
