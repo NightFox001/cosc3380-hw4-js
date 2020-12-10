@@ -1,5 +1,6 @@
 from random import randint
 from datetime import date
+import numpy
 
 def turnSplitIntoTimestamp(year, month, day, hour, minute, second):
     return str(year) + "-" + str(month) + "-" + str(day).zfill(2) + " " + str(hour).zfill(2) + ":" + str(minute).zfill(2) + ":" + str(second).zfill(2) 
@@ -23,6 +24,18 @@ def getRandomStatus():
     #return 'Delayed' if (randint(0,50) == 1) else 'On Schedule'
     return 'On Schedule'
 
+
+def returnTuplesOfAllPossibleAirportToFrom():
+    listOfAirports = ['HOU', 'JFK', 'LAX', 'ORD', 'MIA', 'SEA', 'SFO', 'DEN', 'DFW', 'ATL']
+
+    tupleOfAirports = []
+    for dep in listOfAirports:
+        for arr in listOfAirports:
+            if (dep == arr):
+                continue
+            tupleOfAirports.append((dep, arr))
+
+    return tupleOfAirports
 
 def returnRandomAirportCode():
     switcher={
@@ -56,7 +69,7 @@ def numberOfDays(y, m):
          return 31
       return 30
 
-
+print(returnTuplesOfAllPossibleAirportToFrom())
 for year in [2020, 2021]:
     for month in range(1, 13):
         if (year == 2020 and month != 12):
@@ -70,6 +83,7 @@ for year in [2020, 2021]:
                 second = randint(0,59)
                 flight_cost = randint(150,300)
                 for i in range(0,3):
+                    complementSet = numpy.setdiff1d(ToFromAirports, returnTuplesOfAllPossibleAirportToFrom())
 
 # old generation code. keep for reference
 """
