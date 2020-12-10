@@ -45,7 +45,8 @@ const handler = async (req, res) => {
 						arrival_airport: e.arrival_airport_id,
 						departure_airport: e.departure_airport_id,
 						movie: e.movie,
-						meal: e.meal
+						meal: e.meal,
+						ticket_id: e.ticket_id
 					}
 					if (book_map[e.book_id] === undefined) {
 						book_map[e.book_id] = []
