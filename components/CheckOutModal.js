@@ -95,11 +95,12 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
         // send these to createBooking.js
         user,
         passengers,
-        test : "Hello",
         totalCost,
         taxesPerPass,
         numberOfPassengers,
-        
+        selectedDepartFlights,
+        selectedReturnFlights,
+        flights : [ ...selectedDepartFlights, ...selectedReturnFlights ]
       })
     } catch (error) {
       console.log(error)
