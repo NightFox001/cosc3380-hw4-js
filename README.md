@@ -20,3 +20,5 @@ DO:
 	3. npm run start
 
 You should be able to access the website with this url:[http://localhost:3000/login](http://localhost:3000/login)
+
+This is totally independent from the website
