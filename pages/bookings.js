@@ -8,6 +8,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Grid from '@material-ui/core/Grid';
+import moment, { tz } from "moment"
+
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -70,14 +72,13 @@ const Bookings = () => {
 	},[])
 	
 	const renderBooking = (book_id) => {
-		const tickets = bookings[book_id]
+		const tickets = bookings[book_id].sort( (ticketA, ticketB) => ticketA.ticket_id - ticketB.ticket_id)
 		let predefinedBlock = (
 		// map over booking ids
 		<div>
 			<h2>{`Booking #${book_id}`}</h2>
 			{/* {bookings.map((booking, index) => { */}
 				<div>
-					
 					<Paper className={classes.section}>
 					{tickets.map((ticket) => (
 					<Paper className={classes.section}>
@@ -87,15 +88,16 @@ const Bookings = () => {
 								<div style={{ minHeight: 40, minWidth: 40, borderRadius: "50%", backgroundColor: "#333", display: "flex", alignItems: "center", justifyContent: "center" }}>
 								<FlightIcon style={{ color: "white", transform: "rotate(45deg)" }} />
 								</div>
-					<h4 style={{ margin: 0, marginLeft: 20 }}>ticket #{ticket.ticket_id}</h4>
+								<h4 style={{ margin: 0, marginLeft: 20 }}>ticket #{ticket.ticket_id}</h4>
 								<h2 style={{ margin: 0, marginLeft: 20 }}>{ticket.departure_airport}</h2>
 								<ChevronRightIcon />
 								<h2 style={{ margin: 0 }}>{ticket.arrival_airport}</h2>
-								<h4 style={{ margin: 0, marginLeft: 20 }}></h4>
-							</div>
+								<h4 style={{ margin: 0, marginLeft: 20 }}></h4>	
 
-							
-						
+								<h3 style={{ margin: 5, marginLeft: 20 }}>{moment(ticket.scheduled_departure).format('DD/MM/YYYY h:mma')}</h3>
+								<h4 style={{ margin: 0 }}></h4>
+
+							</div>
 						</div>
 						{/* <div style={{ maxWidth: 250, minWidth: 250, width: 250, minHeight: '100%', backgroundColor: '#ccc', padding: 20 }}>
 							<div style={{ display: "flex", flex: 1 }}>

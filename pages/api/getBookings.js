@@ -33,6 +33,7 @@ const handler = async (req, res) => {
 				GROUP BY flights.flight_id, a.book_id, a.ticket_cost, a.ticket_id;\n
 				`, 
 				{ type: Sequelize.QueryTypes.SELECT });
+			console.log("ticket info: ", ticket_info)
 			let book_map = new Map()
 			ticket_info.forEach((e) => {
 					let book_info = {
