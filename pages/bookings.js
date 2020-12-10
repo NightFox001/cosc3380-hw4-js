@@ -39,19 +39,17 @@ const Bookings = () => {
     router.push('/')
   }
 
-    const handleGetBookings = async () => {
-    try {
-      console.log('getting bookings....')
-      const userString = localStorage.getItem("user")
-      const user = JSON.parse(userString)
-      const response = await axios.get(`/api/getBookings`, {
-        user
-      })
-      console.log(response)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+	const handleGetBookings = async () => {
+		console.log('getting bookings....')
+		try {
+			const userString = localStorage.getItem("user")
+			const user = JSON.parse(userString)
+			const email = user.customer_email;
+			const booking_info = await axios.get(`/api/getBookings?email=${email}`)
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
   const renderBooking = () => {
     return (
@@ -85,20 +83,20 @@ const Bookings = () => {
             <h4 style={{ margin: 0 }}>{`$${123}`}</h4>
             </div>
             <div style={{ display: "flex", flex: 1, marginBottom: 20 }}>
-              <Typography style={{ display: "flex", flex: 1 }}>Taxes and fees per Passenger</Typography>
-              <h4 style={{ margin: 0 }}>{`$${123}`}</h4>
-            </div>
-            <div style={{ display: "flex", flex: 1 }}>
-              <Typography style={{ display: "flex", flex: 1, marginBottom: 10 }}>Total per Passenger</Typography>
-              <h4 style={{ margin: 0 }}>{`$${123}`}</h4>
-            </div>
-            <div style={{ display: "flex", flex: 1, marginBottom: 20 }}>
               <Typography style={{ display: "flex", flex: 1 }}>Passenger(s)</Typography>
-              <h4 style={{ margin: 0 }}>x{123}</h4>
+              <h4 style={{ margin: 0 }}>`$${123}`</h4>
             </div>
             <div style={{ display: "flex", flex: 1 }}>
-              <Typography style={{ display: "flex", flex: 1 }}>Flight total</Typography>
+              <Typography style={{ display: "flex", flex: 1 }}>Subtotal</Typography>
               <h3 style={{ margin: 0 }}>{`$${123}`}</h3>
+            </div>
+            <div style={{ display: "flex", flex: 1 }}>
+              <Typography style={{ display: "flex", flex: 1, marginBottom: 10 }}>Tax</Typography>
+              <h4 style={{ margin: 0 }}>{`$${123}`}</h4>
+            </div>
+            <div style={{ display: "flex", flex: 1 }}>
+              <Typography style={{ display: "flex", flex: 1, marginBottom: 10 }}>Total</Typography>
+              <h4 style={{ margin: 0 }}>{`$${123}`}</h4>
             </div>
           </div>
         </div>
@@ -125,9 +123,9 @@ const Bookings = () => {
       <Button color="primary" onClick={handleGetBookings} variant="contained">Get Bookings</Button>
 
     </div>
-      {renderBooking()}
-      {renderBooking()}
-      {renderBooking()}
+		<script>
+		renderBooking()
+		</script>
       {renderBooking()}
     </>
   )
