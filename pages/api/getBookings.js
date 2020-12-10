@@ -24,7 +24,7 @@ const handler = async (req, res) => {
 							WHERE customer_id IN (\n
 								SELECT customer_id\n
 								FROM customers\n
-								WHERE customer_email = 'bitch@aol.com'\n
+								WHERE customer_email = '${email}'\n
 							)\n
 						)\n
 					)\n

@@ -125,9 +125,9 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
                   <FlightIcon style={{ color: "white", transform: "rotate(45deg)" }} />
                 </div>
                 <h4 style={{ margin: 0, marginLeft: 20 }}>{moment(flight.scheduled_departure).format('MMM Do')}</h4>
-                <h2 style={{ margin: 0, marginLeft: 20 }}>{flight.departure_airport}</h2>
+                <h2 style={{ margin: 0, marginLeft: 20 }}>{flight.departure_airport_id}</h2>
                 <ChevronRightIcon />
-                <h2 style={{ margin: 0 }}>{flight.arrival_airport}</h2>
+                <h2 style={{ margin: 0 }}>{flight.arrival_airport_id}</h2>
                 <h4 style={{ margin: 0, marginLeft: 20 }}>{getTravelTime(flight)}</h4>
               </div>
             ))}
@@ -137,9 +137,9 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
                   <FlightIcon style={{ color: "#222", transform: "rotate(-45deg)" }} />
                 </div>
                 <h4 style={{ margin: 0, marginLeft: 20 }}>{moment(flight.scheduled_departure).format('MMM Do')}</h4>
-                <h2 style={{ margin: 0, marginLeft: 20 }}>{flight.departure_airport}</h2>
+                <h2 style={{ margin: 0, marginLeft: 20 }}>{flight.departure_airport_id}</h2>
                 <ChevronRightIcon />
-                <h2 style={{ margin: 0 }}>{flight.arrival_airport}</h2>
+                <h2 style={{ margin: 0 }}>{flight.arrival_airport_id}</h2>
                 <h4 style={{ margin: 0, marginLeft: 20 }}>{getTravelTime(flight)}</h4>
               </div>
             ))}

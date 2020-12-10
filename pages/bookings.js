@@ -52,7 +52,9 @@ const Bookings = () => {
 		const user = JSON.parse(userString)
 		const email = user.customer_email;
 		const handleGetBookings = async () => {
-			console.log('getting bookings....')
+			// console.log('getting bookings....')
+			console.log('getting bookings for', email)
+
 			try {
 				let booking_info = await axios.get(`/api/getBookings?email=${email}`)
 				setBookings(booking_info.data)
@@ -76,6 +78,7 @@ const Bookings = () => {
 			{/* {bookings.map((booking, index) => { */}
 				<div>
 					
+					<Paper className={classes.section}>
 					{tickets.map((ticket) => (
 					<Paper className={classes.section}>
 						<div style={{ display: "flex", flex: 1 }}>
@@ -84,22 +87,15 @@ const Bookings = () => {
 								<div style={{ minHeight: 40, minWidth: 40, borderRadius: "50%", backgroundColor: "#333", display: "flex", alignItems: "center", justifyContent: "center" }}>
 								<FlightIcon style={{ color: "white", transform: "rotate(45deg)" }} />
 								</div>
-					<h4 style={{ margin: 0, marginLeft: 20 }}>ticket ${ticket.ticket_cost}</h4>
-								<h2 style={{ margin: 0, marginLeft: 20 }}>{ticket.adeparture_airport}</h2>
+					<h4 style={{ margin: 0, marginLeft: 20 }}>ticket #{ticket.ticket_id}</h4>
+								<h2 style={{ margin: 0, marginLeft: 20 }}>{ticket.departure_airport}</h2>
 								<ChevronRightIcon />
 								<h2 style={{ margin: 0 }}>{ticket.arrival_airport}</h2>
 								<h4 style={{ margin: 0, marginLeft: 20 }}></h4>
 							</div>
-							<div style={{ display: "flex", alignItems: "center", padding: 20, borderTopWidth: 1, borderTopStyle: 'solid', borderColor: '#ccc' }}>
-								<div style={{ minHeight: 40, minWidth: 40, borderRadius: "50%", backgroundColor: "#ccc", display: "flex", lignItems: "center", justifyContent: "center" }}>
-								<FlightIcon style={{ color: "#222", transform: "rotate(-45deg)" }} />
-								</div>
-								<h4 style={{ margin: 0, marginLeft: 20 }}>{moment(ticket.scheduled_departure).format('DD/MM/YYYY')}</h4>
-								<h2 style={{ margin: 0, marginLeft: 20 }}>{ticket.scheduled_departure}</h2>
-								<ChevronRightIcon />
-								<h2 style={{ margin: 0 }}>{ticket.scheduled_departure}</h2>
-								<h4 style={{ margin: 0, marginLeft: 20 }}>{ticket.scheduled_departure}</h4>
-							</div>
+
+							
+						
 						</div>
 						{/* <div style={{ maxWidth: 250, minWidth: 250, width: 250, minHeight: '100%', backgroundColor: '#ccc', padding: 20 }}>
 							<div style={{ display: "flex", flex: 1 }}>
@@ -126,6 +122,7 @@ const Bookings = () => {
 						</div>
 					</Paper>
 					))}
+					</Paper>
 				</div>
 		</div>
 
