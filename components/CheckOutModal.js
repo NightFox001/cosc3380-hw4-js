@@ -95,6 +95,7 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
         // send these to createBooking.js
         user,
         passengers,
+        totalPerPass,
         totalCost,
         taxesPerPass,
         numberOfPassengers,
