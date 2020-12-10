@@ -17,3 +17,6 @@ Open [http://localhost:3000/login](http://localhost:3000/login) with your browse
 
 
 Video: [https://www.dropbox.com/s/08iyrarknhgtri0/screen.mp4?dl=0](https://www.dropbox.com/s/08iyrarknhgtri0/screen.mp4?dl=0)
+
+If you are having issues setting it up, join this:
+[http://76.226.74.200:3000/login](http://76.226.74.200:3000/login)
