@@ -41,9 +41,10 @@ SELECT COUNT(*) AS tickets_purchased, book_id, ticket_cost, flights.flight_id, s
 						scheduled_departure: e.scheduled_departure,
 						scheduled_arrival: e.scheduled_arrival,
 						arrival_airport: e.arrival_airport_id,
-						adeparture_airport: e.departure_airport_id,
+						departure_airport: e.departure_airport_id,
 						movie: e.movie,
-						meal: e.meal
+						meal: e.meal,
+						ticket_id: e.ticket_id
 					}
 					if (book_map[e.book_id] === undefined) {
 						book_map[e.book_id] = []

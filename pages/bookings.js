@@ -72,11 +72,11 @@ const Bookings = () => {
 		let predefinedBlock = (
 		// map over booking ids
 		<div>
-			<h2>Your Bookings</h2>
+			<h2>{`Booking #${book_id}`}</h2>
 			{/* {bookings.map((booking, index) => { */}
 				<div>
-					<h2>{`Booking #${book_id}`}</h2>
-					{/* {tickets.map((ticket) => (
+					
+					{tickets.map((ticket) => (
 					<Paper className={classes.section}>
 						<div style={{ display: "flex", flex: 1 }}>
 						<div style={{ display: "flex", flex: 1, flexDirection: 'column' }}>
@@ -84,24 +84,24 @@ const Bookings = () => {
 								<div style={{ minHeight: 40, minWidth: 40, borderRadius: "50%", backgroundColor: "#333", display: "flex", alignItems: "center", justifyContent: "center" }}>
 								<FlightIcon style={{ color: "white", transform: "rotate(45deg)" }} />
 								</div>
-								<h4 style={{ margin: 0, marginLeft: 20 }}>${scheduled_departure1}</h4>
-								<h2 style={{ margin: 0, marginLeft: 20 }}>${departure_airport_id}</h2>
+					<h4 style={{ margin: 0, marginLeft: 20 }}>ticket ${ticket.ticket_cost}</h4>
+								<h2 style={{ margin: 0, marginLeft: 20 }}>{ticket.adeparture_airport}</h2>
 								<ChevronRightIcon />
-								<h2 style={{ margin: 0 }}>${arrival_airport_id}</h2>
-								<h4 style={{ margin: 0, marginLeft: 20 }}>${scheduled_arrival1}</h4>
+								<h2 style={{ margin: 0 }}>{ticket.arrival_airport}</h2>
+								<h4 style={{ margin: 0, marginLeft: 20 }}></h4>
 							</div>
 							<div style={{ display: "flex", alignItems: "center", padding: 20, borderTopWidth: 1, borderTopStyle: 'solid', borderColor: '#ccc' }}>
-								<div style={{ minHeight: 40, minWidth: 40, borderRadius: "50%", backgroundColor: "#ccc", display: "flex", alignItems: "center", justifyContent: "center" }}>
+								<div style={{ minHeight: 40, minWidth: 40, borderRadius: "50%", backgroundColor: "#ccc", display: "flex", lignItems: "center", justifyContent: "center" }}>
 								<FlightIcon style={{ color: "#222", transform: "rotate(-45deg)" }} />
 								</div>
-								<h4 style={{ margin: 0, marginLeft: 20 }}>${scheduled_departure2}</h4>
-								<h2 style={{ margin: 0, marginLeft: 20 }}>${departure_airport_id}</h2>
+								<h4 style={{ margin: 0, marginLeft: 20 }}>{moment(ticket.scheduled_departure).format('DD/MM/YYYY')}</h4>
+								<h2 style={{ margin: 0, marginLeft: 20 }}>{ticket.scheduled_departure}</h2>
 								<ChevronRightIcon />
-								<h2 style={{ margin: 0 }}>${arrival_airport_id}</h2>
-								<h4 style={{ margin: 0, marginLeft: 20 }}>${scheduled_arrival2}</h4>
+								<h2 style={{ margin: 0 }}>{ticket.scheduled_departure}</h2>
+								<h4 style={{ margin: 0, marginLeft: 20 }}>{ticket.scheduled_departure}</h4>
 							</div>
 						</div>
-						<div style={{ maxWidth: 250, minWidth: 250, width: 250, minHeight: '100%', backgroundColor: '#ccc', padding: 20 }}>
+						{/* <div style={{ maxWidth: 250, minWidth: 250, width: 250, minHeight: '100%', backgroundColor: '#ccc', padding: 20 }}>
 							<div style={{ display: "flex", flex: 1 }}>
 							<Typography style={{ display: "flex", flex: 1, marginBottom: 10 }}>Price per Passenger</Typography>
 							<h4 style={{ margin: 0 }}>`$${ticket_cost}`</h4>
@@ -122,10 +122,10 @@ const Bookings = () => {
 							<Typography style={{ display: "flex", flex: 1, marginBottom: 10 }}>Total</Typography>
 							<h4 style={{ margin: 0 }}>`$${tickets_purchased * ticket_cost * 0.0825 + tickets_purchased * ticket_cost}`</h4>
 							</div>
-						</div>
+						</div> */}
 						</div>
 					</Paper>
-					))} */}
+					))}
 				</div>
 		</div>
 
