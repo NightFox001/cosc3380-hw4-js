@@ -74,9 +74,11 @@ const Bookings = () => {
 	const dropBookings = async (book_id) => {
 		try {
 			await axios.get(`/api/dropBooking?book_id=${book_id}`);
+			
 		} catch (error) {
 			console.log(error)
 		}
+		window.location.reload()
 	}
 	
 	const renderBooking = (book_id) => {
