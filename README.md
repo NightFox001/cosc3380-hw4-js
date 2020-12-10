@@ -6,10 +6,14 @@ First, run the development server:
 
 ```bash
 npm install
-npm run dev
+npm run build
+npm run start
 # or
 yarn dev
 ```
+
+Go to your preferred web browser and enter this into the URL:
+http://localhost:3000/login
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

@@ -69,24 +69,8 @@ def numberOfDays(y, m):
          return 31
       return 30
 
-print(returnTuplesOfAllPossibleAirportToFrom())
-for year in [2020, 2021]:
-    for month in range(1, 13):
-        if (year == 2020 and month != 12):
-            continue
-        if (year == 2021 and month > 3):
-            continue
-        for day in range(1,numberOfDays(year, month)):
-            def makeFlightForEachAirport(ToFromAirports, seats_available, movies, meals, aircraftCode, year, month, day):
-                hour = randint(4,6)
-                minute = randint(0,59)
-                second = randint(0,59)
-                flight_cost = randint(150,300)
-                for i in range(0,3):
-                    complementSet = numpy.setdiff1d(ToFromAirports, returnTuplesOfAllPossibleAirportToFrom())
-
-# old generation code. keep for reference
-"""
+year1 = 2020
+year2 = 2021
 for y in "ab":
     year = year1 if y == "a" else year2
     for m in range(1,13):
@@ -136,4 +120,3 @@ for y in "ab":
             makeFlight(260, True, True, 300, 329, codeHashGate, year, month, day)
             makeFlight(150, False, True, 760, 798, codeHashGate, year, month, day)
 
-"""
