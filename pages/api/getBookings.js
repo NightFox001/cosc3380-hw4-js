@@ -9,7 +9,7 @@ const handler = async (req, res) => {
 		let ticket_info
 		try { // get book_id from customers where customer_email = 'email'
 			ticket_info = await connection.query(`
-SELECT COUNT(*) AS tickets_purchased, book_id, ticket_cost, flight_id, scheduled_departure, scheduled_arrival, arrival_airport_id, departure_airport_id, movie, meal\n
+SELECT COUNT(*) AS tickets_purchased, book_id, ticket_cost, flights.flight_id, scheduled_departure, scheduled_arrival, arrival_airport_id, departure_airport_id, movie, meal\n
 				FROM flights, (\n
 					SELECT flight_id, book_id, ticket_cost\n
 					FROM tickets\n
@@ -24,7 +24,7 @@ SELECT COUNT(*) AS tickets_purchased, book_id, ticket_cost, flight_id, scheduled
 							WHERE customer_id IN (\n
 								SELECT customer_id\n
 								FROM customers\n
-								WHERE customer_email = 'youareabitch@aol.com'\n
+								WHERE customer_email = '${email}'\n
 							)\n
 						)\n
 					)\n
@@ -33,7 +33,26 @@ SELECT COUNT(*) AS tickets_purchased, book_id, ticket_cost, flight_id, scheduled
 				GROUP BY flights.flight_id, a.book_id, a.ticket_cost;\n
 				`, 
 				{ type: Sequelize.QueryTypes.SELECT });
-			return res.json(ticket_info)
+			let book_map = new Map()
+			ticket_info.forEach((e) => {
+					let book_info = {
+						ticket_cost: e.ticket_cost,
+						tickets_purchased: e.tickets_purchased,
+						scheduled_departure: e.scheduled_departure,
+						scheduled_arrival: e.scheduled_arrival,
+						arrival_airport: e.arrival_airport_id,
+						adeparture_airport: e.departure_airport_id,
+						movie: e.movie,
+						meal: e.meal
+					}
+					if (book_map[e.book_id] === undefined) {
+						book_map[e.book_id] = []
+						book_map[e.book_id].push(book_info)
+					} else {
+						book_map[e.book_id].push(book_info)
+					}
+			});
+			return res.json(book_map)
 		} 
 		catch (error) {
 			console.log(`\n\n\n\n(In api/getBookins.js)\n tried to get book_id with the customer_email, but got this error... \n
