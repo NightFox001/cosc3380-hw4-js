@@ -89,6 +89,7 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
   // Purchase button clicked
   const handlePurchase = async () => {
     try {
+			window.location.href = window.location.href.substr(0,window.location.href.indexOf("flights") - 1);
       const userString = localStorage.getItem("user")
       const user = JSON.parse(userString)
       const response = await axios.post(`/api/createBooking`, {
@@ -197,7 +198,7 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
           </div>
         </Fragment>
       ))}
-      <Button color="primary" onClick={handlePurchase} variant="contained">Log In</Button>
+      <Button color="primary" onClick={handlePurchase} variant="contained">Purchase</Button>
     </div>
   );
 

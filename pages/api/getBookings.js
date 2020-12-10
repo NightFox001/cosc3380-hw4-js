@@ -33,7 +33,7 @@ SELECT COUNT(*) AS tickets_purchased, book_id, ticket_cost, flights.flight_id, s
 				GROUP BY flights.flight_id, a.book_id, a.ticket_cost;\n
 				`, 
 				{ type: Sequelize.QueryTypes.SELECT });
-			let book_map = new Map()
+			let book_map = new Map();
 			ticket_info.forEach((e) => {
 					let book_info = {
 						ticket_cost: e.ticket_cost,
@@ -45,11 +45,11 @@ SELECT COUNT(*) AS tickets_purchased, book_id, ticket_cost, flights.flight_id, s
 						movie: e.movie,
 						meal: e.meal
 					}
-					if (book_map[e.book_id] === undefined) {
-						book_map[e.book_id] = []
-						book_map[e.book_id].push(book_info)
+					if (book_map.get(e.book_id) === undefined) {
+						book_map.set(e.book_id, book_info);
 					} else {
-						book_map[e.book_id].push(book_info)
+						let l = book_map.get(e.book_id);
+						book_map.set(e.book_id, [l, book_info])						
 					}
 			});
 			console.log(book_map)
