@@ -70,6 +70,14 @@ const Bookings = () => {
 		}
 		setTimeout(handleGetBookings, 0)
 	},[])
+
+	const dropBookings = async (book_id) => {
+		try {
+			await axios.get(`/api/dropBooking?book_id=${book_id}`);
+		} catch (error) {
+			console.log(error)
+		}
+	}
 	
 	const renderBooking = (book_id) => {
 		const tickets = bookings[book_id].sort( (ticketA, ticketB) => ticketA.ticket_id - ticketB.ticket_id)
@@ -80,6 +88,7 @@ const Bookings = () => {
 			{/* {bookings.map((booking, index) => { */}
 				<div>
 					<Paper className={classes.section}>
+					<Button onClick={() => dropBookings(`${book_id}`)} variant="contained">Drop Booking</Button>
 					{tickets.map((ticket) => (
 					<Paper className={classes.section}>
 						<div style={{ display: "flex", flex: 1 }}>

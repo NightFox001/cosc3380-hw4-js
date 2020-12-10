@@ -17,7 +17,7 @@ const creds = {
 */
 const creds = {
   database: "COSC3380",
-  username: "cosc0146",
+  username: "cosc0210",
   password: "",
   host: "code.cs.uh.edu",
   dialect: "postgres"

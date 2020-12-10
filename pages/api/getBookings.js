@@ -34,7 +34,6 @@ const handler = async (req, res) => {
 				ORDER BY book_id;
 				`, 
 				{ type: Sequelize.QueryTypes.SELECT });
-			console.log("ticket info: ", ticket_info)
 			let book_map = new Map()
 			ticket_info.forEach((e) => {
 					let book_info = {
@@ -59,8 +58,7 @@ const handler = async (req, res) => {
 						book_map[e.book_id].push(book_info)
 					}
 			});
-			console.log(book_map);
-			return res.json(book_map)
+			return res.json(book_map);
 		} 
 		catch (error) {
 			console.log(`\n\n\n\n(In api/getBookins.js)\n tried to get book_id with the customer_email, but got this error... \n
