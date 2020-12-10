@@ -9,28 +9,29 @@ const handler = async (req, res) => {
 		let ticket_info
 		try { // get book_id from customers where customer_email = 'email'
 			ticket_info = await connection.query(`
-				SELECT COUNT(*) AS tickets_purchased, ticket_id, book_id, ticket_cost, flights.flight_id, scheduled_departure, scheduled_arrival, arrival_airport_id, departure_airport_id, movie, meal\n
-				FROM flights, (\n
-					SELECT flight_id, ticket_id, book_id, ticket_cost\n
-					FROM tickets\n
-					INNER JOIN passengers ON passengers.passenger_id = tickets.passenger_id \n
-					GROUP BY tickets.flight_id, passengers.book_id, tickets.ticket_cost, passengers.passenger_id, tickets.ticket_id\n
-					HAVING passengers.passenger_id IN (\n
-						SELECT passenger_id\n
-						FROM passengers\n
-						WHERE book_id IN (\n
-							SELECT book_id\n
-							FROM bookings\n
-							WHERE customer_id IN (\n
-								SELECT customer_id\n
-								FROM customers\n
-								WHERE customer_email = '${email}'\n
-							)\n
-						)\n
-					)\n
-				)a\n
-				WHERE flights.flight_id = a.flight_id\n
-				GROUP BY flights.flight_id, a.book_id, a.ticket_cost, a.ticket_id;\n
+				SELECT ticket_id, book_id, ticket_cost, flights.flight_id, scheduled_departure, scheduled_arrival, arrival_airport_id, departure_airport_id, movie, meal
+				FROM flights, (
+					SELECT flight_id, ticket_id, book_id, ticket_cost
+					FROM tickets
+					INNER JOIN passengers ON passengers.passenger_id = tickets.passenger_id 
+					GROUP BY tickets.flight_id, passengers.book_id, tickets.ticket_cost, passengers.passenger_id, tickets.ticket_id
+					HAVING passengers.passenger_id IN (
+						SELECT passenger_id
+						FROM passengers
+						WHERE book_id IN (
+							SELECT book_id
+							FROM bookings
+							WHERE customer_id IN (
+								SELECT customer_id
+								FROM customers
+								WHERE customer_email = '${email}'
+							)
+						)
+					)
+				)a
+				WHERE flights.flight_id = a.flight_id
+				GROUP BY flights.flight_id, a.book_id, a.ticket_cost, a.ticket_id
+				ORDER BY book_id;
 				`, 
 				{ type: Sequelize.QueryTypes.SELECT });
 			let book_map = new Map()
@@ -38,7 +39,7 @@ const handler = async (req, res) => {
 					let book_info = {
 						ticket_cost: e.ticket_cost,
 						ticket_id: e.ticket_id,
-						tickets_purchased: e.tickets_purchased,
+						tickets_purchased: 1,
 						scheduled_departure: e.scheduled_departure,
 						scheduled_arrival: e.scheduled_arrival,
 						arrival_airport: e.arrival_airport_id,
@@ -50,9 +51,13 @@ const handler = async (req, res) => {
 						book_map[e.book_id] = []
 						book_map[e.book_id].push(book_info)
 					} else {
+						book_map[e.book_id].forEach((e) => {
+							book_info.tickets_purchased = ++e.tickets_purchased;
+						});
 						book_map[e.book_id].push(book_info)
 					}
 			});
+			console.log(book_map);
 			return res.json(book_map)
 		} 
 		catch (error) {
