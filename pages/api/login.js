@@ -5,7 +5,7 @@ const handler = async (req, res) => {
 	let customer = null
 	const email = req.query?.email
 	const password = req.query?.password
-	console.log(email, password)
+	// console.log(email, password)
 
 	try {
 		customer = await connection.query('SELECT customer_email, password\nFROM customers\nWHERE customer_email = \'' + email + '\' AND password = \'' + password + '\';', {

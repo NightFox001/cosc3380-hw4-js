@@ -52,6 +52,7 @@ SELECT COUNT(*) AS tickets_purchased, book_id, ticket_cost, flights.flight_id, s
 						book_map[e.book_id].push(book_info)
 					}
 			});
+			console.log(book_map)
 			return res.json(book_map)
 		} 
 		catch (error) {
