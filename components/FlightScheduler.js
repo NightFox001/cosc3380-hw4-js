@@ -30,19 +30,19 @@ export const FlightScheduler = () => {
   const classes = useStyles()
   const router = useRouter()
   const [selectedDepartAirport, setSelectedDepartAirport] = useState("HOU")
-  const [selectedArriveAirport, setSelectedArriveAirport] = useState()
+  const [selectedArriveAirport, setSelectedArriveAirport] = useState("0")
   const [selectedDepartDate, setSelectedDepartDate] = useState(new Date())
   const [selectedReturnDate, setSelectedArriveDate] = useState(moment().add(1, "day").toDate())
   const [airports, setAirports] = useState([])
   const [loadingAirports, setLoadingAirports] = useState(true)
   const [tripType, setTripType] = useState("roundTrip")
-  const [selectedPassengers, setSelectedPassengers] = useState("1")
+  const [passengers, setPassengers] = useState("1")
 
   useEffect(() => {
       if (airports.length) {
-          const nonDepartAirports = airports.filter(city => (city.airport_code !== selectedDepartAirport))
+          const nonDepartAirports = airports.filter(city => (city.airport_id !== selectedDepartAirport))
           const arriveCity = nonDepartAirports[Math.floor(Math.random() * nonDepartAirports.length)]
-          setSelectedArriveAirport(arriveCity.airport_code)
+          setSelectedArriveAirport(arriveCity.airport_id)
       }
   }, [airports])
 
@@ -59,16 +59,38 @@ export const FlightScheduler = () => {
     setTimeout(getAirports, 0)
   }, [])
 
+  const handleLogOut = () => {
+    localStorage.removeItem('user')
+    router.push('/login')
+  }
+
+  const navigateToBookings = () => {
+    router.push('/bookings')
+  }
+
   const searchFlights = async () => {
     const departDateFormatted = moment(selectedDepartDate).format('YYYY-MM-DD')
     const returnDateFormatted = moment(selectedReturnDate).format('YYYY-MM-DD')
-    console.log(departDateFormatted, returnDateFormatted)
-    router.push(`/flights?departAirport=${selectedDepartAirport}&arriveAirport=${selectedArriveAirport}&departDate=${departDateFormatted}&returnDate=${returnDateFormatted}&tripType=${tripType}`)
+    router.push(`/flights?departAirport=${selectedDepartAirport}&arriveAirport=${selectedArriveAirport}&departDate=${departDateFormatted}&returnDate=${returnDateFormatted}&passengers=${passengers}&tripType=${tripType}`)
   }
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <h1 style={{ color: 'white', fontWeight: 900 }}>Flights</h1>
+      <div style={{ display: 'flex' }}>
+        <Button
+          onClick={navigateToBookings}
+          variant="contained"
+        >
+          Bookings
+        </Button>
+        <Button
+          onClick={handleLogOut}
+          variant="contained"
+        >
+          Log Out
+        </Button>
+      </div>
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -80,7 +102,7 @@ export const FlightScheduler = () => {
           <FlightSchedulerItem> {/* [0,0] */}
             <DropDownInput
               title="Depart"
-              options={airports.map(({ city, airport_code }) => ({ label: city, value: airport_code}))}
+              options={airports.map(({ city, airport_id }) => ({ label: city, value: airport_id}))}
               selected={selectedDepartAirport}
               defaultOption={{ label: "", value: "0" }}
               onChange={setSelectedDepartAirport}
@@ -100,20 +122,20 @@ export const FlightScheduler = () => {
               value={selectedDepartDate}
               onChange={setSelectedDepartDate}
             />
-          </FlightSchedulerItem>         
+          </FlightSchedulerItem>
           <FlightSchedulerItem> {/* [0,2] */}
             <DropDownInput
                 title="Passengers"
                 options={["1","2","3","4","5"].map(number => ({ value: number, label: number }))}
-                selected={selectedPassengers}
+                selected={passengers}
                 defaultOption={{ label: "", value: "0" }}
-                onChange={setSelectedPassengers}
+                onChange={setPassengers}
               />
           </FlightSchedulerItem>         
           <FlightSchedulerItem> {/* [1,0] */}
             <DropDownInput
               title="Destination"
-              options={airports.map(({ city, airport_code }) => ({ label: city, value: airport_code}))}
+              options={airports.map(({ city, airport_id }) => ({ label: city, value: airport_id}))}
               selected={selectedArriveAirport}
               defaultOption={{ label: "", value: "0" }}
               onChange={setSelectedArriveAirport}
@@ -136,10 +158,17 @@ export const FlightScheduler = () => {
             />
           </FlightSchedulerItem>
           <Grid item xs={12}>
-            <Button color="primary" onClick={searchFlights} variant="contained">Search</Button>
+            <Button
+              color="primary"
+              onClick={searchFlights}
+              variant="contained"
+              disabled={tripType === "roundTrip" && (!selectedArriveAirport || selectedArriveAirport === "0") || selectedArriveAirport === selectedDepartAirport}
+            >
+              Search
+            </Button>
           </Grid>
         </Grid>
-        </Paper>
-      </MuiPickersUtilsProvider>
+      </Paper>
+    </MuiPickersUtilsProvider>
   )
 }
