@@ -62,6 +62,10 @@ const Flights = () => {
       setTimeout(getFlights, 0)
     }
   }, [departDate])
+	
+	const navigateToSearch = () => {
+		router.push('/')
+	}
 
   const handleContinue = () => {
     const canContinue = !!returnFlights.length && !!selectedReturnFlightIds.length || !returnFlights.length && !!selectedDepartFlightIds.length
@@ -250,6 +254,12 @@ const Flights = () => {
           </>
         )}
         <Grid container>
+					<Button
+						style={{ marginTop: 20 }}
+						onClick={navigateToSearch}
+						variant="contained">
+						back
+					</Button>
           <Button
             style={{ marginTop: 20 }}
             color="secondary"

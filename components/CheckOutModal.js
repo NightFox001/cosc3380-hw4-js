@@ -84,6 +84,10 @@ export const CheckOutModal = ({ showModal, handleClose, numberOfPassengers, depa
       return JSON.parse(JSON.stringify(passengers))
     })
   }
+	
+	const navigateToSearch = () => {
+		router.push('/')
+	}
   
 
   // Purchase button clicked
