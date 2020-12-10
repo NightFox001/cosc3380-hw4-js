@@ -76,7 +76,7 @@ const Bookings = () => {
 			{/* {bookings.map((booking, index) => { */}
 				<div>
 					<h2>{`Booking #${book_id}`}</h2>
-					{tickets.map((ticket) => (
+					{/* {tickets.map((ticket) => (
 					<Paper className={classes.section}>
 						<div style={{ display: "flex", flex: 1 }}>
 						<div style={{ display: "flex", flex: 1, flexDirection: 'column' }}>
@@ -125,7 +125,7 @@ const Bookings = () => {
 						</div>
 						</div>
 					</Paper>
-					))}
+					))} */}
 				</div>
 		</div>
 
