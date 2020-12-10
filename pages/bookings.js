@@ -1,3 +1,4 @@
+import axios from "axios";
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -36,6 +37,20 @@ const Bookings = () => {
 
   const navigateToSearch = () => {
     router.push('/')
+  }
+
+    const handleGetBookings = async () => {
+    try {
+      console.log('getting bookings....')
+      const userString = localStorage.getItem("user")
+      const user = JSON.parse(userString)
+      const response = await axios.get(`/api/getBookings`, {
+        user
+      })
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const renderBooking = () => {
@@ -107,6 +122,8 @@ const Bookings = () => {
       >
         Log Out
       </Button>
+      <Button color="primary" onClick={handleGetBookings} variant="contained">Get Bookings</Button>
+
     </div>
       {renderBooking()}
       {renderBooking()}

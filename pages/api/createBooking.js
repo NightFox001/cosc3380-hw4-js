@@ -48,12 +48,13 @@ const handler = async (req, res) => {
 
 // Get book_id that was just created
         let book_id
+        let result3
         try {
-            book_id = await connection.query(`\
-            SELECT book_id \n\
+            result3 = await connection.query(`\
+            SELECT MAX(book_id) \n\
             FROM bookings \n\
             WHERE customer_id = '${customer_id}';`, { type: Sequelize.QueryTypes.SELECT });
-            book_id = book_id[0].book_id
+            book_id = result3[0].max
             // throw 'Got book_id without error'
         } 
         catch (error) {
@@ -62,7 +63,7 @@ const handler = async (req, res) => {
             connection.query(`ROLLBACK;`)
             return res.status(500).json({ message: error.message })
         }
-        // console.log('book_id = ', book_id)
+        console.log('book_id = ', book_id)
 
 
 
