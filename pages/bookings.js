@@ -93,7 +93,6 @@ const Bookings = () => {
 					<Button onClick={() => dropBookings(`${book_id}`)} variant="contained">Drop Booking</Button>
 					{tickets.map((ticket) => (
 					<Paper className={classes.section}>
-						<div style={{ display: "flex", flex: 1 }}>
 						<div style={{ display: "flex", flex: 1, flexDirection: 'column' }}>
 							<div style={{ display: "flex", alignItems: "center", padding: 20, borderTopWidth: 0, borderTopStyle: 'solid', borderColor: '#ccc' }}>
 								<div style={{ minHeight: 40, minWidth: 40, borderRadius: "50%", backgroundColor: "#333", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -109,29 +108,6 @@ const Bookings = () => {
 								<h4 style={{ margin: 0 }}></h4>
 
 							</div>
-						</div>
-						{/* <div style={{ maxWidth: 250, minWidth: 250, width: 250, minHeight: '100%', backgroundColor: '#ccc', padding: 20 }}>
-							<div style={{ display: "flex", flex: 1 }}>
-							<Typography style={{ display: "flex", flex: 1, marginBottom: 10 }}>Price per Passenger</Typography>
-							<h4 style={{ margin: 0 }}>`$${ticket_cost}`</h4>
-							</div>
-							<div style={{ display: "flex", flex: 1, marginBottom: 20 }}>
-							<Typography style={{ display: "flex", flex: 1 }}>Passenger(s)</Typography>
-							<h4 style={{ margin: 0 }}>`${tickets_purchased}`</h4>
-							</div>
-							<div style={{ display: "flex", flex: 1 }}>
-							<Typography style={{ display: "flex", flex: 1 }}>Subtotal</Typography>
-							<h3 style={{ margin: 0 }}>`${tickets_purchased * ticket_cost}`</h3>
-							</div>
-							<div style={{ display: "flex", flex: 1 }}>
-							<Typography style={{ display: "flex", flex: 1, marginBottom: 10 }}>Tax</Typography>
-							<h4 style={{ margin: 0 }}>`$${tickets_purchased * ticket_cost * 0.0825}`</h4>
-							</div>
-							<div style={{ display: "flex", flex: 1 }}>
-							<Typography style={{ display: "flex", flex: 1, marginBottom: 10 }}>Total</Typography>
-							<h4 style={{ margin: 0 }}>`$${tickets_purchased * ticket_cost * 0.0825 + tickets_purchased * ticket_cost}`</h4>
-							</div>
-						</div> */}
 						</div>
 					</Paper>
 					))}
