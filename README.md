@@ -22,3 +22,5 @@ DO:
 You should be able to access the website with this url:[http://localhost:3000/login](http://localhost:3000/login)
 
 This is totally independent from the website
+
+Video: https://drive.google.com/file/d/1wwmAI9_hI-GDgtK9ho1w6SR4WQ_XZ61k/view?usp=sharing
