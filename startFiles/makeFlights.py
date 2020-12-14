@@ -76,7 +76,7 @@ for y in "ab":
     for m in range(1,13):
         if (year == 2020 and m != 12):
             continue
-        if (year == 2021 and m > 3):
+        if (year == 2021 and m > 2):
             continue
         month = m
         for day in range(1,31):
@@ -113,7 +113,7 @@ for y in "ab":
                         arrTime = turnSplitIntoTimestamp(year, month, day, hour, minute, second)
                         (year, month, day, hour, minute, second) = getDeparture(year, month, day, hour, minute, second)
                         depTime = turnSplitIntoTimestamp(year, month, day, hour, minute, second)
-                        print("INSERT INTO flights (aircraft_code,scheduled_departure, scheduled_arrival, departure_airport_id, arrival_airport_id, departure_gate_id, arrival_gate_id, status, waitlist_no, seats_available, movie, meal, flight_cost)\nVALUES('" + str(boeingAircraft) + "','" + str(arrTime) + "','" + str(depTime) + "','" + str(deAirport) + "','" + str(arAirport) + "','" + str(degate) + "','" + str(argate) + "','" + str(status) + "','" + str(seats_booked) + "','" + str(seats_available) + "','" + str(movie) + "','" + str(meal) + "','" + str(flight_cost) + "');")
+                        print("INSERT INTO GWNJ2E.flights (aircraft_code,scheduled_departure, scheduled_arrival, departure_airport_id, arrival_airport_id, departure_gate_id, arrival_gate_id, status, waitlist_no, seats_available, movie, meal, flight_cost)\nVALUES('" + str(boeingAircraft) + "','" + str(arrTime) + "','" + str(depTime) + "','" + str(deAirport) + "','" + str(arAirport) + "','" + str(degate) + "','" + str(argate) + "','" + str(status) + "','" + str(seats_booked) + "','" + str(seats_available) + "','" + str(movie) + "','" + str(meal) + "','" + str(flight_cost) + "');")
 
             codeHashGate = []
             makeFlight(210, True, True, 700, 733, codeHashGate, year, month, day)
