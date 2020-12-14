@@ -2,7 +2,7 @@ import Sequelize from 'sequelize'
 
 const creds = {
   database: "COSC3380",
-  username: "cosc0210",
+  username: "cosc0146",
   password: "",
   host: "code.cs.uh.edu",
   dialect: "postgres"
