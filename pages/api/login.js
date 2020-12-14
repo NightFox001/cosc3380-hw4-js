@@ -8,7 +8,11 @@ const handler = async (req, res) => {
 	// console.log(email, password)
 
 	try {
-		customer = await connection.query('SELECT customer_email, password\nFROM customers\nWHERE customer_email = \'' + email + '\' AND password = \'' + password + '\';', {
+		customer = await connection.query(`
+		SELECT customer_email, password 
+		FROM GWNJ2E.customers 
+		WHERE customer_email = ' + email + ' 
+		AND password = ' + password + ';`, {
 			type: Sequelize.QueryTypes.SELECT
 		});
 		

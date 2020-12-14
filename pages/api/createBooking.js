@@ -22,7 +22,7 @@ const handler = async (req, res) => {
         try { // get customer_id from customers where customer_email = 'email'
             customer_id = await connection.query(`\
             SELECT customer_id \n\
-            FROM customers \n\
+            FROM GWNJ2E.customers \n\
             WHERE customer_email = '${email}';`, { type: Sequelize.QueryTypes.SELECT });
             customer_id = customer_id[0].customer_id
             // console.log(email, customer)
@@ -37,7 +37,7 @@ const handler = async (req, res) => {
         // let book_obj
         try {  
             await connection.query(`\n
-            INSERT INTO bookings (customer_id, book_date, card_no, total, taxes) \n
+            INSERT INTO GWNJ2E.bookings (customer_id, book_date, card_no, total, taxes) \n
             VALUES ('${customer_id}', '${book_date}', '${card_no}', '${total}', '${taxes}');\n`)
             // console.log(book_obj)
         } 
@@ -52,7 +52,7 @@ const handler = async (req, res) => {
         try {
             result3 = await connection.query(`\
             SELECT MAX(book_id) \n\
-            FROM bookings \n\
+            FROM GWNJ2E.bookings \n\
             WHERE customer_id = '${customer_id}';`, { type: Sequelize.QueryTypes.SELECT });
             book_id = result3[0].max
             // throw 'Got book_id without error'
@@ -75,7 +75,7 @@ const handler = async (req, res) => {
             let passEmail = passenger.email
             try {
                 connection.query(`\n
-                    INSERT INTO passengers (book_id, passenger_name, phone, email) \n
+                    INSERT INTO GWNJ2E.passengers (book_id, passenger_name, phone, email) \n
                     VALUES ('${book_id}', '${name}', '${phone}', '${passEmail}');\n\n`)
             } 
             catch (error) {
@@ -90,7 +90,7 @@ const handler = async (req, res) => {
 // Insert PASSENGERS
         for (let i = 0; i < allFlights.length; i += 1 ) {
             let flight = allFlights[i]
-            console.log(`\n\nflight loop ${i}: flight id = ${flight.flight_id}`)
+            // console.log(`\n\nflight loop ${i}: flight id = ${flight.flight_id}`)
             for (let j = 0; j < numberOfPassengers; j += 1) {
                 let passenger = passengers[j]
                 let name = passenger.name
@@ -100,7 +100,7 @@ const handler = async (req, res) => {
 
                 let passenger_id
                 try { // get that pasenger's id
-                let result1 = await connection.query(`SELECT MAX(passenger_id) FROM passengers;`, { type: Sequelize.QueryTypes.SELECT });
+                let result1 = await connection.query(`SELECT MAX(passenger_id) FROM GWNJ2E.passengers;`, { type: Sequelize.QueryTypes.SELECT });
                         console.log(' result1 = ', result1)
                     passenger_id = result1[0].max - numberOfPassengers+j+1 
                 } 
@@ -119,7 +119,7 @@ const handler = async (req, res) => {
                 try {
                     result = await connection.query(`\
                     SELECT waitlist_no, seats_available \n\
-                    FROM flights \n\
+                    FROM GWNJ2E.flights \n\
                     WHERE flight_id = ${flight.flight_id};`, {
                         type: Sequelize.QueryTypes.SELECT});
                         waitlist_no = result[0].seats_available
@@ -141,7 +141,7 @@ const handler = async (req, res) => {
                     // decrease num of seats available for that flight
                     try {
                         await connection.query(`\
-                            UPDATE flights \n
+                            UPDATE GWNJ2E.flights \n
                             SET seats_available = seats_available - 1 \n
                             WHERE flight_id = ${flight.flight_id};`)
                     } catch (error) {
@@ -155,7 +155,7 @@ const handler = async (req, res) => {
                     try {
                         waitlist_no = waitlist_no + 1
                         await connection.query(`\
-                            UPDATE flights \n
+                            UPDATE GWNJ2E.flights \n
                             SET waitlist_no = waitlist_no + 1 \n
                             WHERE flight_id = ${flight.flight_id};`)
                     } catch (error) {
@@ -172,7 +172,7 @@ const handler = async (req, res) => {
                 let ticket_cost = flight.flight_cost // add taxes to this cost
                 try {
                     connection.query(`\n
-                    INSERT INTO tickets (flight_id, passenger_id, ticket_cost, waitlist_no) \n
+                    INSERT INTO GWNJ2E.tickets (flight_id, passenger_id, ticket_cost, waitlist_no) \n
                     VALUES ('${flight.flight_id}', '${passenger_id}', '${ticket_cost}', '${waitlist_no}');\n`)
                 } 
                 catch (error) {

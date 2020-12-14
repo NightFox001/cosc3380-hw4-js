@@ -9,7 +9,7 @@ const handler = async (req, res) => {
     // const boarding_pass_id = req.query?.boarding_pass_id
 
     try {
-        connection.query(`INSERT INTO tickets (flight_id, passenger_id, ticket_cost, waitlist_no)  VALUES ('${flight_id}', '${passenger_id}', '${ticket_cost}', '${waitlist_no}');`)
+        connection.query(`INSERT INTO GWNJ2E.tickets (flight_id, passenger_id, ticket_cost, waitlist_no)  VALUES ('${flight_id}', '${passenger_id}', '${ticket_cost}', '${waitlist_no}');`)
     } catch (error) {
         connection.query(`ROLLBACK;`) // Rollback any tickets, passengers, and booking created in this transaction
         return res.status(500).json({ message: error.message })

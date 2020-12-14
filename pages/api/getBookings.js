@@ -10,20 +10,20 @@ const handler = async (req, res) => {
 		try { // get book_id from customers where customer_email = 'email'
 			ticket_info = await connection.query(`
 				SELECT ticket_id, book_id, ticket_cost, flights.flight_id, scheduled_departure, scheduled_arrival, arrival_airport_id, departure_airport_id, movie, meal
-				FROM flights, (
+				FROM GWNJ2E.flights, (
 					SELECT flight_id, ticket_id, book_id, ticket_cost
-					FROM tickets
-					INNER JOIN passengers ON passengers.passenger_id = tickets.passenger_id 
-					GROUP BY tickets.flight_id, passengers.book_id, tickets.ticket_cost, passengers.passenger_id, tickets.ticket_id
-					HAVING passengers.passenger_id IN (
+					FROM GWNJ2E.tickets
+					INNER JOIN GWNJ2E.passengers ON GWNJ2E.passengers.passenger_id = GWNJ2E.tickets.passenger_id 
+					GROUP BY GWNJ2E.tickets.flight_id, GWNJ2E.passengers.book_id, GWNJ2E.tickets.ticket_cost, GWNJ2E.passengers.passenger_id, GWNJ2E.tickets.ticket_id
+					HAVING GWNJ2E.passengers.passenger_id IN (
 						SELECT passenger_id
-						FROM passengers
+						FROM GWNJ2E.passengers
 						WHERE book_id IN (
 							SELECT book_id
-							FROM bookings
+							FROM GWNJ2E.bookings
 							WHERE customer_id IN (
 								SELECT customer_id
-								FROM customers
+								FROM GWNJ2E.customers
 								WHERE customer_email = '${email}'
 							)
 						)

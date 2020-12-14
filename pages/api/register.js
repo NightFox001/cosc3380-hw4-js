@@ -3,7 +3,7 @@ import { connection, Sequelize } from '../../models'
 const handler = async (req, res) => {
     let customers
     try {
-        customers = await connection.query(`SELECT customer_email\n FROM customers;`, {
+        customers = await connection.query(`SELECT customer_email\n FROM GWNJ2E.customers;`, {
             type: Sequelize.QueryTypes.SELECT
         });
     } 
@@ -24,8 +24,8 @@ const handler = async (req, res) => {
     try {
         connection.query(
             `BEGIN;
-            INSERT INTO customers (customer_name, customer_email, password, city) VALUES ('${name}', '${email}', '${password}', '${city}');`)
-        const customer = await connection.query(`SELECT *\n FROM customers WHERE customer_email = '${email}';`, {
+            INSERT INTO GWNJ2E.customers (customer_name, customer_email, password, city) VALUES ('${name}', '${email}', '${password}', '${city}');`)
+        const customer = await connection.query(`SELECT *\n FROM GWNJ2E.customers WHERE customer_email = '${email}';`, {
             type: Sequelize.QueryTypes.SELECT    
         });
         connection.query('COMMIT;')

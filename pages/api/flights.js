@@ -14,7 +14,7 @@ const handler = async (req, res) => {
     try {
       const nonstopFlights = await connection.query(
         `SELECT * \n
-        FROM flights \n
+        FROM GWNJ2E.flights \n
         WHERE departure_airport_id = '${departAirport}' \n
         AND arrival_airport_id = '${arriveAirport}' \n
         AND scheduled_departure BETWEEN '${departDateFormatted}'
@@ -40,8 +40,8 @@ const handler = async (req, res) => {
               f2.departure_airport_id as f2_departure_airport_id, \n
               f2.arrival_airport_id as f2_arrival_airport_id, \n
               f2.flight_cost as f2_flight_cost \n
-          FROM flights as f1 \n
-          INNER JOIN flights as f2 \n
+          FROM GWNJ2E.flights as f1 \n
+          INNER JOIN GWNJ2E.flights as f2 \n
               on f1.flight_id <> f2.flight_id \n
               AND f1.scheduled_departure >= '${departDateFormatted}' \n
               AND f1.scheduled_departure <= '${dayAfterDepartFormatted}' \n
