@@ -19,12 +19,6 @@ def getArrival(year, month, day, hour, minute, second):
     else:
         return year, month, day, hour, randint(0,59), randint(0,59)
 
-
-def getRandomStatus():
-    #return 'Delayed' if (randint(0,50) == 1) else 'On Schedule'
-    return 'On Schedule'
-
-
 def returnTuplesOfAllPossibleAirportToFrom():
     listOfAirports = ['HOU', 'JFK', 'LAX', 'ORD', 'MIA', 'SEA', 'SFO', 'DEN', 'DFW', 'ATL']
 
@@ -105,7 +99,7 @@ for y in "ab":
                             continue
                         codeHashGate.append(argateHash)
                         codeHashGate.append(degateHash)
-                        status = getRandomStatus()
+                        status = 'On Schedule'
                         seats_booked = 0
                         movie = 'TRUE' if (movieB) else 'FALSE'
                         meal = 'TRUE' if (mealB) else 'FALSE'
