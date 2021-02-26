@@ -23,7 +23,7 @@ const Login = () => {
     const [error, setError] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-		const [loadingAccount, setLoadingAccount] = useState(false)
+	const [loadingAccount, setLoadingAccount] = useState(false)
 
     const goToRegister = () => {
         router.push("/register")
